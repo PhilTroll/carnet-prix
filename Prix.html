@@ -27,34 +27,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;color:var(--muted);font-size:10px;cursor:pointer;padding-top:8px}
 .tab.active{color:var(--accent)}
 .tab-icon{font-size:21px}
-
-/* Nav header */
 .nav-header{background:var(--card);padding:14px 16px 10px;border-bottom:.5px solid var(--border);position:sticky;top:0;z-index:5}
 .nav-title{font-size:20px;font-weight:700;color:var(--ink)}
-
-/* Hero panel */
 .hero-panel{margin:14px;padding:16px;border-radius:12px;background:linear-gradient(135deg,#e0f5f0,#fff4e6);border:1px solid rgba(255,255,255,0.75)}
 .hero-title{font-size:22px;font-weight:700;color:var(--ink);margin-bottom:4px}
 .hero-sub{font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.4}
 .hero-best{background:rgba(255,255,255,0.7);border-radius:8px;padding:10px 12px}
 .hero-best-val{font-size:15px;font-weight:700;color:var(--accent)}
 .hero-best-lbl{font-size:11px;color:var(--muted);margin-top:2px}
-
-/* Stat tiles */
 .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 14px 14px}
 .stat-tile{background:var(--panel);border-radius:10px;border:1px solid var(--border);padding:10px;display:flex;align-items:center;gap:8px}
-.stat-icon{font-size:18px;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.stat-icon{font-size:18px;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .stat-val{font-size:14px;font-weight:700;color:var(--ink)}
 .stat-lbl{font-size:10px;color:var(--muted)}
-
-/* Entry card */
 .entry-card{margin:0 14px 14px;background:rgba(255,255,255,0.88);border-radius:12px;border:1px solid rgba(255,255,255,0.9);padding:16px}
 .entry-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
 .entry-icon{width:44px;height:44px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .entry-title{font-size:16px;font-weight:700;color:var(--ink)}
 .entry-sub{font-size:12px;color:var(--muted);margin-top:2px}
-
-/* Fields */
 .field{margin-bottom:12px}
 .field-label{font-size:11px;font-weight:600;color:var(--accent);margin-bottom:5px;display:flex;align-items:center;gap:4px}
 .field-label.coral{color:var(--coral)}
@@ -65,8 +55,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 .field input.price-input:focus{border-color:rgba(212,64,64,0.4)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-
-/* Preview block */
 .preview-block{border-radius:8px;padding:12px 14px;margin-bottom:12px;display:flex;gap:12px}
 .preview-block.filled{background:linear-gradient(90deg,rgba(0,116,118,0.12),rgba(219,148,36,0.12));border:1px solid rgba(0,116,118,0.18)}
 .preview-block.empty{background:rgba(255,255,255,0.62);border:1px solid var(--border)}
@@ -74,30 +62,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 .preview-label{font-size:11px;font-weight:600;color:var(--muted);margin-bottom:3px}
 .preview-val{font-size:15px;font-weight:700;color:var(--accent)}
 .preview-val.muted{color:var(--muted);font-size:13px;font-weight:400}
-
-/* Buttons */
+/* Progress bar comparison */
+.price-bar-wrap{margin-top:8px}
+.price-bar-label{font-size:11px;color:var(--muted);margin-bottom:4px;display:flex;justify-content:space-between}
+.price-bar-track{height:6px;background:rgba(0,0,0,0.08);border-radius:3px;overflow:hidden}
+.price-bar-fill{height:100%;border-radius:3px;transition:width .4s}
+.price-bar-fill.good{background:var(--accent)}
+.price-bar-fill.bad{background:var(--coral)}
 .btn-primary{width:100%;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-primary:disabled{opacity:.45}
 .btn-secondary{width:100%;padding:12px;background:rgba(255,255,255,0.82);color:var(--ink);border:1px solid var(--border);border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
 .btn-danger{background:none;border:none;color:var(--coral);font-size:13px;cursor:pointer;padding:4px 8px;font-family:inherit}
 .btn-edit{background:rgba(0,116,118,0.1);border:none;color:var(--accent);font-size:11px;font-weight:600;cursor:pointer;padding:4px 8px;border-radius:6px;font-family:inherit}
-
-/* Search bar */
 .search-wrap{padding:10px 14px;background:var(--card);border-bottom:.5px solid var(--border);position:sticky;top:0;z-index:5}
 .search-input{width:100%;padding:9px 12px 9px 34px;border:1px solid var(--border);border-radius:10px;font-size:14px;background:#f5f5f0;color:var(--ink);font-family:inherit;outline:none;-webkit-appearance:none}
 .search-wrap-inner{position:relative}
 .search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none}
-
-/* Filter row */
 .filter-row{display:flex;gap:8px;padding:8px 14px;overflow-x:auto;scrollbar-width:none;background:var(--card)}
 .filter-row::-webkit-scrollbar{display:none}
 .chip{white-space:nowrap;padding:6px 13px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer}
 .chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
-
-/* Section label */
 .slabel{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;padding:10px 14px 6px}
-
-/* Price rows */
+/* Sort segmented control */
+.sort-ctrl{display:flex;margin:8px 14px;background:rgba(0,0,0,0.06);border-radius:10px;padding:3px;gap:2px}
+.sort-btn{flex:1;padding:7px 4px;border:none;background:none;border-radius:8px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;font-family:inherit;transition:.15s}
+.sort-btn.on{background:var(--card);color:var(--accent);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
 .price-card{margin:0 14px 8px;background:var(--panel);border-radius:10px;border:1px solid var(--border);padding:12px 14px}
 .price-card.highlight{background:rgba(255,255,255,0.94);border-color:rgba(0,116,118,0.35)}
 .pc-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px}
@@ -113,17 +102,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 .tag.coral{background:rgba(212,64,64,0.1);color:var(--coral)}
 .tag.gold{background:rgba(219,148,36,0.1);color:var(--gold)}
 .tag.grey{background:rgba(0,0,0,0.06);color:var(--muted)}
+.tag.best{background:var(--accent);color:#fff}
 .pc-actions{display:flex;gap:6px;margin-top:8px}
-
-/* Comparison summary */
+/* Comparison bar on card */
+.card-bar{margin-top:8px}
+.card-bar-track{height:5px;background:rgba(0,0,0,0.07);border-radius:3px;overflow:hidden}
+.card-bar-fill{height:100%;border-radius:3px}
+.card-bar-label{font-size:10px;color:var(--muted);margin-top:3px;display:flex;justify-content:space-between}
 .cmp-summary{margin:10px 14px;background:var(--panel);border-radius:10px;border:1px solid var(--border);padding:14px;display:flex;gap:12px;align-items:center}
 .cmp-icon{font-size:22px;width:46px;height:46px;background:rgba(219,148,36,0.14);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .cmp-text{flex:1}
 .cmp-title{font-size:14px;font-weight:600;color:var(--ink)}
 .cmp-sub{font-size:12px;color:var(--muted);margin-top:2px}
 .cmp-count{font-size:16px;font-weight:700;color:var(--accent);background:rgba(0,116,118,0.12);padding:6px 12px;border-radius:8px}
-
-/* History */
 .hist-card{margin:0 14px 8px;background:var(--panel);border-radius:10px;border:1px solid var(--border);overflow:hidden}
 .hist-header{padding:12px 14px;cursor:pointer;display:flex;align-items:flex-start;gap:8px}
 .hist-header:active{background:rgba(0,0,0,0.03)}
@@ -141,22 +132,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 .hist-store{font-size:11px;color:var(--muted)}
 .hist-price{font-size:13px;font-weight:600;color:var(--ink)}
 .hist-actions{display:flex;gap:4px;margin-top:4px}
-
-/* Stats section */
+/* Mini chart */
+.mini-chart{margin:8px 0 4px;height:48px;position:relative}
+.mini-chart svg{width:100%;height:100%}
 .stats-block{margin:0 14px 10px;background:var(--panel);border-radius:10px;border:1px solid var(--border);overflow:hidden}
 .stats-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:.5px solid var(--border)}
 .stats-row:last-child{border-bottom:none}
 .stats-key{font-size:13px;color:var(--muted)}
 .stats-val{font-size:13px;font-weight:600;color:var(--ink)}
-
-/* CSV tab */
 .csv-section{margin:14px;background:var(--panel);border-radius:12px;border:1px solid var(--border);overflow:hidden}
 .csv-section-title{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;padding:12px 14px 8px;border-bottom:.5px solid var(--border)}
-.csv-btn-row{padding:12px 14px}
+.csv-btn-row{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
 .csv-note{font-size:12px;color:var(--muted);padding:0 14px 12px;line-height:1.5}
 .csv-summary{font-size:12px;color:var(--accent);padding:0 14px 12px;font-weight:500}
-
-/* Modal / sheet */
+/* Backup banner */
+.backup-banner{margin:0 14px 10px;background:rgba(219,148,36,0.12);border:1px solid rgba(219,148,36,0.3);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.backup-banner-text{flex:1;font-size:12px;color:var(--ink);line-height:1.4}
+.backup-banner-btn{background:var(--gold);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:50;display:none;align-items:flex-end}
 .modal-overlay.open{display:flex}
 .modal-sheet{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:430px;margin:0 auto;padding-bottom:calc(var(--safe-bot) + 10px);max-height:90dvh;overflow-y:auto}
@@ -166,22 +158,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 .modal-close{background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;padding:0}
 .modal-save{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
 .modal-body{padding:0 16px 16px}
-
-/* Alert */
+/* Detail modal */
+.detail-section{margin-bottom:16px}
+.detail-section-title{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.detail-store-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:.5px solid var(--border)}
+.detail-store-row:last-child{border-bottom:none}
+.detail-store-name{font-size:13px;font-weight:600;color:var(--ink)}
+.detail-store-price{font-size:13px;color:var(--accent);font-weight:600}
+.detail-store-date{font-size:11px;color:var(--muted)}
+/* Full chart */
+.chart-wrap{height:120px;position:relative;margin:8px 0}
+.chart-wrap svg{width:100%;height:100%}
 .alert-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:100;display:none;align-items:center;justify-content:center}
 .alert-overlay.open{display:flex}
-.alert-box{background:var(--card);border-radius:14px;width:280px;padding:20px;text-align:center}
+.alert-box{background:var(--card);border-radius:14px;width:290px;padding:20px;text-align:center}
 .alert-title{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px}
-.alert-msg{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:18px}
+.alert-msg{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:18px;white-space:pre-line}
 .alert-btns{display:flex;gap:8px}
 .alert-btn{flex:1;padding:10px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
 .alert-btn.primary{background:var(--accent);color:#fff}
 .alert-btn.secondary{background:rgba(0,0,0,0.06);color:var(--ink)}
 .alert-btn.danger{background:var(--coral);color:#fff}
-
-/* Toast */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 18px;border-radius:20px;font-size:13px;display:none;z-index:200;white-space:nowrap;pointer-events:none}
-
 .empty-state{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;line-height:1.6}
 </style>
 </head>
@@ -193,7 +191,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
   </div>
   <div class="screen">
 
-    <!-- TAB: ENCODER -->
+    <!-- ENCODER -->
     <div class="view active" id="v-encode">
       <div class="hero-panel">
         <div class="hero-title">🧺 Carnet de prix</div>
@@ -203,92 +201,41 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
           <div class="hero-best-lbl">le magasin qui propose les prix les moins chers</div>
         </div>
       </div>
-
       <div class="entry-card">
         <div class="entry-header">
           <div class="entry-icon">🛒</div>
-          <div>
-            <div class="entry-title">Nouvel achat</div>
-            <div class="entry-sub">Un ticket, un prix, une comparaison claire.</div>
-          </div>
+          <div><div class="entry-title">Nouvel achat</div><div class="entry-sub">Un ticket, un prix, une comparaison claire.</div></div>
         </div>
-
-        <div class="field">
-          <div class="field-label">🏷 Article *</div>
-          <input type="text" id="f-name" placeholder="Ex: Café moulu 250 g" oninput="updatePreview()">
-        </div>
+        <div class="field"><div class="field-label">🏷 Article *</div><input type="text" id="f-name" placeholder="Ex: Café moulu 250 g" oninput="updatePreview()"></div>
         <div class="row2">
-          <div class="field">
-            <div class="field-label">🔖 Marque</div>
-            <input type="text" id="f-brand" placeholder="Ex: Bio Nature" oninput="updatePreview()">
-          </div>
-          <div class="field">
-            <div class="field-label">📦 Catégorie</div>
-            <input type="text" id="f-category" placeholder="Épicerie">
-          </div>
+          <div class="field"><div class="field-label">🔖 Marque</div><input type="text" id="f-brand" placeholder="Ex: Bio Nature" oninput="updatePreview()"></div>
+          <div class="field"><div class="field-label">📦 Catégorie</div><input type="text" id="f-category" placeholder="Épicerie"></div>
         </div>
-        <div class="field">
-          <div class="field-label">🏪 Magasin *</div>
-          <input type="text" id="f-store" placeholder="Ex: Biocoop" oninput="updatePreview()">
+        <div class="field"><div class="field-label">🏪 Magasin *</div><input type="text" id="f-store" placeholder="Ex: Biocoop" oninput="updatePreview()"></div>
+        <div class="row3">
+          <div class="field"><div class="field-label coral">€ Prix *</div><input type="number" id="f-price" placeholder="0,00" step="0.01" class="price-input" oninput="updatePreview()"></div>
+          <div class="field"><div class="field-label gold">⚖ Qté</div><input type="number" id="f-quantity" value="1" step="0.001" oninput="updatePreview()"></div>
+          <div class="field"><div class="field-label gold">Unité</div><select id="f-unit" onchange="updatePreview()"><option value="piece">pièce</option><option value="kg">kg</option><option value="g">g</option><option value="l">l</option><option value="ml">ml</option><option value="pack">pack</option></select></div>
         </div>
         <div class="row3">
-          <div class="field" style="grid-column:span 1">
-            <div class="field-label coral">€ Prix payé *</div>
-            <input type="number" id="f-price" placeholder="0,00" step="0.01" class="price-input" oninput="updatePreview()">
-          </div>
-          <div class="field">
-            <div class="field-label gold">⚖ Quantité</div>
-            <input type="number" id="f-quantity" value="1" step="0.001" oninput="updatePreview()">
-          </div>
-          <div class="field">
-            <div class="field-label gold">📏 Unité</div>
-            <select id="f-unit" onchange="updatePreview()">
-              <option value="piece">pièce</option>
-              <option value="kg">kg</option>
-              <option value="g">g</option>
-              <option value="l">l</option>
-              <option value="ml">ml</option>
-              <option value="pack">pack</option>
-            </select>
-          </div>
-        </div>
-        <div class="row3">
-          <div class="field" style="grid-column:span 2">
-            <div class="field-label gold">📦 Poids</div>
-            <input type="number" id="f-weight" placeholder="Ex: 250" step="0.001" oninput="updatePreview()">
-          </div>
-          <div class="field">
-            <div class="field-label gold">Unité</div>
-            <select id="f-weightunit" onchange="updatePreview()">
-              <option value="g">g</option>
-              <option value="kg">kg</option>
-            </select>
-          </div>
+          <div class="field" style="grid-column:span 2"><div class="field-label gold">📦 Poids</div><input type="number" id="f-weight" placeholder="Ex: 250" step="0.001" oninput="updatePreview()"></div>
+          <div class="field"><div class="field-label gold">Unité</div><select id="f-weightunit" onchange="updatePreview()"><option value="g">g</option><option value="kg">kg</option></select></div>
         </div>
         <div class="row2">
-          <div class="field">
-            <div class="field-label">📅 Date</div>
-            <input type="date" id="f-date">
-          </div>
-          <div class="field">
-            <div class="field-label">📝 Note</div>
-            <input type="text" id="f-note" placeholder="Promo, format...">
-          </div>
+          <div class="field"><div class="field-label">📅 Date</div><input type="date" id="f-date"></div>
+          <div class="field"><div class="field-label">📝 Note</div><input type="text" id="f-note" placeholder="Promo, format..."></div>
         </div>
-
         <div class="preview-block empty" id="preview-block">
           <div style="font-size:20px;margin-right:4px">✨</div>
           <div style="font-size:13px;color:var(--muted);line-height:1.5">Le prix unitaire et les comparaisons apparaissent dès que l'article, le magasin et le prix sont remplis.</div>
         </div>
-
         <button class="btn-primary" id="save-btn" onclick="prepareSave()" disabled>✓ Enregistrer</button>
         <button class="btn-secondary" onclick="resetForm()">↺ Réinitialiser</button>
       </div>
-
       <div class="stat-grid" id="stat-grid"></div>
     </div>
 
-    <!-- TAB: COMPARER -->
+    <!-- COMPARER -->
     <div class="view" id="v-compare">
       <div class="search-wrap">
         <div class="search-wrap-inner">
@@ -297,27 +244,50 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
         </div>
       </div>
       <div class="filter-row" id="cmp-filters"></div>
+      <div class="sort-ctrl">
+        <button class="sort-btn on" id="sort-price" onclick="setSort('price')">💶 Prix</button>
+        <button class="sort-btn" id="sort-recent" onclick="setSort('recent')">🕐 Récent</button>
+        <button class="sort-btn" id="sort-article" onclick="setSort('article')">🔤 Article</button>
+      </div>
       <div id="cmp-content"></div>
     </div>
 
-    <!-- TAB: HISTORIQUE -->
+    <!-- HISTORIQUE -->
     <div class="view" id="v-history">
-      <div class="nav-header"><div class="nav-title">Historique</div></div>
+      <div class="search-wrap" style="top:0">
+        <div class="search-wrap-inner">
+          <span class="search-icon">🔍</span>
+          <input class="search-input" id="hist-search" placeholder="Rechercher dans l'historique..." oninput="renderHistory()">
+        </div>
+      </div>
       <div id="hist-content"></div>
     </div>
 
-    <!-- TAB: CSV -->
+    <!-- CSV -->
     <div class="view" id="v-csv">
-      <div class="nav-header"><div class="nav-title">CSV</div></div>
+      <div class="nav-header"><div class="nav-title">CSV & Sauvegarde</div></div>
+      <div class="backup-banner">
+        <span style="font-size:22px">💾</span>
+        <div class="backup-banner-text"><strong>Sauvegardez vos données</strong><br>Téléchargez une copie JSON pour ne jamais perdre vos prix.</div>
+        <button class="backup-banner-btn" onclick="backupJSON()">Sauvegarder</button>
+      </div>
       <div class="csv-section">
-        <div class="csv-section-title">Exporter</div>
+        <div class="csv-section-title">Restaurer une sauvegarde</div>
+        <div class="csv-btn-row">
+          <button class="btn-primary" onclick="document.getElementById('json-input').click()">📂 Restaurer depuis JSON</button>
+          <input type="file" id="json-input" accept=".json" style="display:none" onchange="restoreJSON(this)">
+        </div>
+        <div class="csv-note">Restaure une sauvegarde JSON précédemment téléchargée. Attention : remplace toutes les données actuelles.</div>
+      </div>
+      <div class="csv-section">
+        <div class="csv-section-title">Exporter CSV</div>
         <div class="csv-btn-row">
           <button class="btn-primary" onclick="exportCSV()" id="export-btn">⬆ Exporter en CSV</button>
         </div>
-        <div class="csv-note">Télécharge un fichier CSV avec tous vos articles actifs. Colonnes : article, magasin, marque, prix, quantite, unite, poids, unite_poids, categorie, note, date.</div>
+        <div class="csv-note">Colonnes : article, magasin, marque, prix, quantite, unite, poids, unite_poids, categorie, note, date.</div>
       </div>
-      <div class="csv-section" style="margin-top:0">
-        <div class="csv-section-title">Importer</div>
+      <div class="csv-section">
+        <div class="csv-section-title">Importer CSV</div>
         <div class="csv-btn-row">
           <button class="btn-primary" onclick="document.getElementById('csv-input').click()">⬇ Importer un CSV</button>
           <input type="file" id="csv-input" accept=".csv,.txt" style="display:none" onchange="importCSV(this)">
@@ -328,12 +298,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
     </div>
 
   </div>
-
   <div class="tabbar">
     <button class="tab active" id="tab-encode" onclick="goTab('encode')"><span class="tab-icon">➕</span>Encoder</button>
     <button class="tab" id="tab-compare" onclick="goTab('compare')"><span class="tab-icon">🔍</span>Comparer</button>
     <button class="tab" id="tab-history" onclick="goTab('history')"><span class="tab-icon">🕐</span>Historique</button>
-    <button class="tab" id="tab-csv" onclick="goTab('csv')"><span class="tab-icon">📄</span>CSV</button>
+    <button class="tab" id="tab-csv" onclick="goTab('csv')"><span class="tab-icon">💾</span>CSV</button>
   </div>
 </div>
 
@@ -349,18 +318,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
       </div>
     </div>
     <div class="modal-body">
-      <div class="field"><div class="field-label">🏷 Article *</div><input type="text" id="e-name" placeholder="Ex: Café moulu 250 g"></div>
+      <div class="field"><div class="field-label">🏷 Article *</div><input type="text" id="e-name"></div>
       <div class="row2">
         <div class="field"><div class="field-label">🔖 Marque</div><input type="text" id="e-brand"></div>
         <div class="field"><div class="field-label">📦 Catégorie</div><input type="text" id="e-category"></div>
       </div>
       <div class="field"><div class="field-label">🏪 Magasin *</div><input type="text" id="e-store"></div>
       <div class="row3">
-        <div class="field" style="grid-column:span 1"><div class="field-label coral">€ Prix *</div><input type="number" id="e-price" step="0.01" class="price-input"></div>
+        <div class="field"><div class="field-label coral">€ Prix *</div><input type="number" id="e-price" step="0.01" class="price-input"></div>
         <div class="field"><div class="field-label gold">⚖ Qté</div><input type="number" id="e-quantity" step="0.001"></div>
-        <div class="field"><div class="field-label gold">Unité</div>
-          <select id="e-unit"><option value="piece">pièce</option><option value="kg">kg</option><option value="g">g</option><option value="l">l</option><option value="ml">ml</option><option value="pack">pack</option></select>
-        </div>
+        <div class="field"><div class="field-label gold">Unité</div><select id="e-unit"><option value="piece">pièce</option><option value="kg">kg</option><option value="g">g</option><option value="l">l</option><option value="ml">ml</option><option value="pack">pack</option></select></div>
       </div>
       <div class="row3">
         <div class="field" style="grid-column:span 2"><div class="field-label gold">📦 Poids</div><input type="number" id="e-weight" step="0.001"></div>
@@ -368,6 +335,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
       </div>
       <div class="field"><div class="field-label">📝 Note</div><input type="text" id="e-note"></div>
     </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detail-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title" id="detail-modal-title">Détail produit</div>
+      <button class="modal-close" onclick="closeDetail()">✕</button>
+    </div>
+    <div class="modal-body" id="detail-modal-body"></div>
   </div>
 </div>
 
@@ -384,14 +363,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;backg
 
 <script>
 // ── STORAGE ───────────────────────────────────────────
-const SK = 'prix_items_v1';
+const SK='prix_items_v2';
 function loadItems(){try{const r=localStorage.getItem(SK);return r?JSON.parse(r):[]}catch{return[]}}
-function saveItems(d){try{localStorage.setItem(SK,JSON.stringify(d))}catch(e){toast('⚠️ Espace de stockage limité')}}
+function saveItems(d){try{localStorage.setItem(SK,JSON.stringify(d))}catch(e){toast('⚠️ Espace limité — sauvegardez en JSON !')}}
 
-let items = loadItems();
-let editingId = null;
-let selectedStore = 'Tous';
-let pendingAction = null;
+let items=loadItems();
+let editingId=null;
+let selectedStore='Tous';
+let sortMode='price';
 
 // ── TIME ──────────────────────────────────────────────
 function setTime(){const n=new Date();document.getElementById('st-time').textContent=n.getHours()+':'+(n.getMinutes()<10?'0':'')+n.getMinutes();}
@@ -399,52 +378,32 @@ setTime();setInterval(setTime,10000);
 
 // ── HELPERS ───────────────────────────────────────────
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2500);}
-
-function formatCurrency(v){return new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR'}).format(v);}
-
-function formatDate(iso){
-  if(!iso)return'-';
-  const d=new Date(iso);
-  return d.toLocaleDateString('fr-BE',{day:'numeric',month:'short',year:'numeric'});
-}
-
+function fCur(v){return new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR'}).format(v);}
+function fDate(iso){if(!iso)return'-';const d=new Date(iso);return d.toLocaleDateString('fr-BE',{day:'numeric',month:'short',year:'numeric'});}
 function todayISO(){return new Date().toISOString().split('T')[0];}
-
-function normalizeSearch(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();}
-
-function parseNum(s){if(!s&&s!==0)return null;const n=parseFloat(String(s).replace(',','.'));return isNaN(n)?null:n;}
+function norm(s){return(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();}
+function parseNum(s){if(s===''||s===null||s===undefined)return null;const n=parseFloat(String(s).replace(',','.'));return isNaN(n)?null:n;}
 
 function unitPrice(item){
-  const wKg = item.weight>0 ? (item.weightUnit==='kg'?item.weight:item.weight/1000) : 0;
-  if(wKg>0) return item.price/wKg;
+  const wKg=item.weight>0?(item.weightUnit==='kg'?item.weight:item.weight/1000):0;
+  if(wKg>0)return item.price/wKg;
   return item.price/Math.max(item.quantity||1,0.0001);
 }
-
 function compUnit(item){
-  const wKg = item.weight>0 ? (item.weightUnit==='kg'?item.weight:item.weight/1000) : 0;
+  const wKg=item.weight>0?(item.weightUnit==='kg'?item.weight:item.weight/1000):0;
   return wKg>0?'kg':(item.unit||'pièce');
 }
-
-function unitPriceText(item){
-  return `${formatCurrency(unitPrice(item))} / ${compUnit(item)}`;
-}
-
-function productKey(name,brand){
-  return [name,brand].map(normalizeSearch).filter(Boolean).join('|');
-}
-
+function upText(item){return`${fCur(unitPrice(item))} / ${compUnit(item)}`;}
+function prodKey(name,brand){return[name,brand].map(norm).filter(Boolean).join('|');}
+function displayName(item){return item.brand?`${item.name} - ${item.brand}`:item.name;}
 function activeItems(){return items.filter(i=>!i.archived);}
 function archivedItems(){return items.filter(i=>i.archived);}
-
-function bestOverall(){
-  return activeItems().filter(i=>i.price>0).sort((a,b)=>unitPrice(a)-unitPrice(b))[0]||null;
-}
+function bestOverall(){return activeItems().filter(i=>i.price>0).sort((a,b)=>unitPrice(a)-unitPrice(b))[0]||null;}
 
 function showAlert(title,msg,buttons){
   document.getElementById('alert-title').textContent=title;
   document.getElementById('alert-msg').textContent=msg;
-  const bc=document.getElementById('alert-btns');
-  bc.innerHTML='';
+  const bc=document.getElementById('alert-btns');bc.innerHTML='';
   buttons.forEach(b=>{
     const el=document.createElement('button');
     el.className='alert-btn '+(b.style||'secondary');
@@ -461,26 +420,23 @@ function goTab(tab){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('v-'+tab).classList.add('active');
   document.getElementById('tab-'+tab).classList.add('active');
-  if(tab==='encode'){renderEncode();}
-  if(tab==='compare'){renderCompare();}
-  if(tab==='history'){renderHistory();}
-  if(tab==='csv'){renderCSV();}
+  if(tab==='encode')renderEncode();
+  if(tab==='compare')renderCompare();
+  if(tab==='history')renderHistory();
+  if(tab==='csv')renderCSV();
 }
 
-// ── ENCODE TAB ────────────────────────────────────────
+// ── ENCODE ────────────────────────────────────────────
 function renderEncode(){
-  // Hero best store
   const best=bestOverall();
   document.getElementById('hero-best-store').textContent=best?best.store:'Aucun magasin';
-  // Stats
   const stores=new Set(activeItems().map(i=>i.store).filter(Boolean));
   const latest=activeItems().sort((a,b)=>new Date(b.date)-new Date(a.date))[0];
   document.getElementById('stat-grid').innerHTML=`
     <div class="stat-tile"><div class="stat-icon" style="background:rgba(0,116,118,0.12)">🛒</div><div><div class="stat-val">${activeItems().length}</div><div class="stat-lbl">Articles</div></div></div>
     <div class="stat-tile"><div class="stat-icon" style="background:rgba(212,64,64,0.12)">🏪</div><div><div class="stat-val">${stores.size}</div><div class="stat-lbl">Magasins</div></div></div>
-    <div class="stat-tile"><div class="stat-icon" style="background:rgba(219,148,36,0.12)">📅</div><div><div class="stat-val">${latest?formatDate(latest.date):'-'}</div><div class="stat-lbl">Dernier</div></div></div>
+    <div class="stat-tile"><div class="stat-icon" style="background:rgba(219,148,36,0.12)">📅</div><div><div class="stat-val">${latest?fDate(latest.date):'-'}</div><div class="stat-lbl">Dernier</div></div></div>
   `;
-  // Save button state
   updatePreview();
 }
 
@@ -493,37 +449,41 @@ function updatePreview(){
   const weight=parseNum(document.getElementById('f-weight').value)||0;
   const weightUnit=document.getElementById('f-weightunit').value;
   const brand=(document.getElementById('f-brand').value||'').trim();
-
   const valid=name&&store&&price>0&&quantity>0;
   document.getElementById('save-btn').disabled=!valid;
-
   if(!valid){
     document.getElementById('preview-block').className='preview-block empty';
     document.getElementById('preview-block').innerHTML=`<div style="font-size:20px;margin-right:4px">✨</div><div style="font-size:13px;color:var(--muted);line-height:1.5">Le prix unitaire et les comparaisons apparaissent dès que l'article, le magasin et le prix sont remplis.</div>`;
     return;
   }
-
   const draft={name,store,price,quantity,unit,brand,weight,weightUnit};
   const up=unitPrice(draft);
   const cu=compUnit(draft);
-
-  // Find best comparable
-  const key=productKey(name,brand);
-  const matches=activeItems().filter(i=>productKey(i.name,i.brand)===key&&i.price>0);
+  const key=prodKey(name,brand);
+  const matches=activeItems().filter(i=>prodKey(i.name,i.brand)===key&&i.price>0);
   const best=matches.sort((a,b)=>unitPrice(a)-unitPrice(b))[0];
-
   let recText='Premier prix pour ce produit';
+  let barHTML='';
   if(best){
-    if(up<=unitPrice(best)) recText='Votre prix est le moins cher connu ✓';
-    else recText=`${unitPriceText(best)} chez ${best.store}`;
+    const bup=unitPrice(best);
+    if(up<=bup){recText='Votre prix est le moins cher connu ✓';}
+    else{
+      recText=`${upText(best)} chez ${best.store}`;
+      const pct=Math.min(100,Math.round((up/bup)*100));
+      const color=pct<=105?'good':'bad';
+      barHTML=`<div class="price-bar-wrap"><div class="price-bar-label"><span>Votre prix</span><span>${pct}% du meilleur prix</span></div><div class="price-bar-track"><div class="price-bar-fill ${color}" style="width:${Math.min(pct,100)}%"></div></div></div>`;
+    }
   }
-
   document.getElementById('preview-block').className='preview-block filled';
   document.getElementById('preview-block').innerHTML=`
-    <div class="preview-col"><div class="preview-label">Prix unitaire</div><div class="preview-val">${formatCurrency(up)} / ${cu}</div></div>
-    <div style="width:1px;background:rgba(0,116,118,0.15);margin:0 4px"></div>
-    <div class="preview-col"><div class="preview-label">Moins cher trouvé</div><div class="preview-val ${best&&up>unitPrice(best)?'':'muted'}" style="font-size:13px">${recText}</div></div>
-  `;
+    <div style="flex:1">
+      <div style="display:flex;gap:12px">
+        <div class="preview-col"><div class="preview-label">Prix unitaire</div><div class="preview-val">${fCur(up)} / ${cu}</div></div>
+        <div style="width:1px;background:rgba(0,116,118,0.15)"></div>
+        <div class="preview-col"><div class="preview-label">Moins cher trouvé</div><div class="preview-val ${best&&up>unitPrice(best)?'':'muted'}" style="font-size:13px">${recText}</div></div>
+      </div>
+      ${barHTML}
+    </div>`;
 }
 
 function prepareSave(){
@@ -538,42 +498,23 @@ function prepareSave(){
   const category=(document.getElementById('f-category').value||'').trim();
   const note=(document.getElementById('f-note').value||'').trim();
   const date=document.getElementById('f-date').value||todayISO();
-
   const draft={name,brand,store,price,quantity,unit,weight,weightUnit,category,note,date};
-  const key=productKey(name,brand);
-  const matches=activeItems().filter(i=>productKey(i.name,i.brand)===key);
-
+  const key=prodKey(name,brand);
+  const matches=activeItems().filter(i=>prodKey(i.name,i.brand)===key);
   if(matches.length>0){
-    const details=matches.slice(0,3).map(i=>`${i.store} — ${formatCurrency(i.price)} le ${formatDate(i.date)}`).join('\n');
-    const displayName=brand?`${name} - ${brand}`:name;
-    showAlert(
-      'Article déjà encodé',
-      `"${displayName}" existe déjà dans vos prix.\n\n${details}\n\nComparez le prix avant de l'ajouter.`,
-      [
-        {label:'Ajouter quand même',style:'primary',action:()=>doSave(draft)},
-        {label:'Annuler',style:'secondary'}
-      ]
-    );
-  } else {
-    doSave(draft);
-  }
+    const details=matches.slice(0,3).map(i=>`${i.store} — ${fCur(i.price)} le ${fDate(i.date)}`).join('\n');
+    const dn=brand?`${name} - ${brand}`:name;
+    showAlert('Article déjà encodé',`"${dn}" existe déjà.\n\n${details}\n\nComparez avant d'ajouter.`,[
+      {label:'Ajouter quand même',style:'primary',action:()=>doSave(draft)},
+      {label:'Annuler',style:'secondary'}
+    ]);
+  } else doSave(draft);
 }
 
 function doSave(draft){
-  const item={
-    id:Date.now().toString(),
-    name:draft.name,brand:draft.brand,store:draft.store,
-    price:draft.price,quantity:draft.quantity,unit:draft.unit,
-    weight:draft.weight,weightUnit:draft.weightUnit,
-    category:draft.category,note:draft.note,
-    date:draft.date,archived:false
-  };
-  items.unshift(item);
-  saveItems(items);
-  resetForm();
-  renderEncode();
-  const displayName=draft.brand?`${draft.name} - ${draft.brand}`:draft.name;
-  toast(`✓ ${displayName} chez ${draft.store} enregistré`);
+  items.unshift({id:Date.now().toString(),...draft,archived:false});
+  saveItems(items);resetForm();renderEncode();
+  toast(`✓ ${draft.brand?`${draft.name} - ${draft.brand}`:draft.name} enregistré`);
 }
 
 function resetForm(){
@@ -588,90 +529,190 @@ function resetForm(){
   document.getElementById('preview-block').innerHTML=`<div style="font-size:20px;margin-right:4px">✨</div><div style="font-size:13px;color:var(--muted);line-height:1.5">Le prix unitaire et les comparaisons apparaissent dès que l'article, le magasin et le prix sont remplis.</div>`;
 }
 
-// ── COMPARE TAB ───────────────────────────────────────
-function renderCompare(){
-  const q=normalizeSearch(document.getElementById('cmp-search').value||'');
-  const ai=activeItems();
-  const stores=['Tous',...new Set(ai.map(i=>i.store).filter(Boolean)).values()].sort();
+// ── COMPARE ───────────────────────────────────────────
+function setSort(mode){
+  sortMode=mode;
+  ['price','recent','article'].forEach(m=>{
+    document.getElementById('sort-'+m).classList.toggle('on',m===mode);
+  });
+  renderCompare();
+}
 
-  // Filters
+function renderCompare(){
+  const q=norm(document.getElementById('cmp-search').value||'');
+  const ai=activeItems();
+  const stores=['Tous',...new Set(ai.map(i=>i.store).filter(Boolean))].sort();
   document.getElementById('cmp-filters').innerHTML=stores.map(s=>
     `<div class="chip${s===selectedStore?' on':''}" onclick="selectedStore='${s}';renderCompare()">${s}</div>`
   ).join('');
-
-  // Filter items
   let filtered=ai.filter(i=>{
     const ms=selectedStore==='Tous'||i.store===selectedStore;
     if(!ms)return false;
     if(!q)return true;
-    return [i.name,i.brand,i.store,i.category,i.note,i.weightUnit].some(f=>normalizeSearch(f||'').includes(q));
+    return[i.name,i.brand,i.store,i.category,i.note].some(f=>norm(f||'').includes(q));
   });
 
-  // Sort by unit price
-  filtered=filtered.sort((a,b)=>unitPrice(a)-unitPrice(b));
-  const best=filtered[0]||null;
+  // Sort
+  if(sortMode==='price') filtered=filtered.sort((a,b)=>unitPrice(a)-unitPrice(b));
+  else if(sortMode==='recent') filtered=filtered.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  else filtered=filtered.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
 
+  // Best prices per product key for comparison bars
+  const bestByKey={};
+  ai.filter(i=>i.price>0).forEach(i=>{
+    const k=prodKey(i.name,i.brand);
+    if(!bestByKey[k]||unitPrice(i)<unitPrice(bestByKey[k])) bestByKey[k]=i;
+  });
+
+  const best=sortMode==='price'?filtered[0]:null;
   let html='';
-  // Summary
   if(ai.length>0){
+    const globalBest=bestOverall();
     html+=`<div class="cmp-summary">
       <div class="cmp-icon">✨</div>
       <div class="cmp-text">
-        <div class="cmp-title">${best?(best.brand?`${best.name} - ${best.brand}`:best.name):'Comparez vos articles'}</div>
-        <div class="cmp-sub">${best?`Meilleur prix : ${unitPriceText(best)} chez ${best.store}`:'Ajoutez quelques prix pour faire ressortir les bonnes affaires.'}</div>
+        <div class="cmp-title">${globalBest?displayName(globalBest):'Comparez vos articles'}</div>
+        <div class="cmp-sub">${globalBest?`Meilleur prix global : ${upText(globalBest)} chez ${globalBest.store}`:'Ajoutez des prix pour faire ressortir les bonnes affaires.'}</div>
       </div>
       <div class="cmp-count">${filtered.length}</div>
     </div>`;
   }
-
   if(filtered.length===0){
-    html+=`<div class="empty-state">🔍 Aucun prix trouvé<br><span style="font-size:12px">Cherchez un article, une marque, un magasin ou une catégorie.</span></div>`;
+    html+=`<div class="empty-state">🔍 Aucun prix trouvé</div>`;
   } else {
-    if(best){
-      html+=`<div class="slabel">Meilleur choix</div>`;
-      html+=priceCardHTML(best,true);
-    }
+    if(best&&sortMode==='price'){html+=`<div class="slabel">Meilleur choix</div>`+priceCardHTML(best,true,bestByKey);}
     html+=`<div class="slabel">Résultats</div>`;
-    filtered.forEach(item=>{ html+=priceCardHTML(item,false); });
+    filtered.forEach(item=>{ html+=priceCardHTML(item,false,bestByKey); });
   }
-
   document.getElementById('cmp-content').innerHTML=html;
 }
 
-function priceCardHTML(item,highlight){
-  const up=unitPriceText(item);
-  const displayName=item.brand?`${item.name} - ${item.brand}`:item.name;
-  const initial=displayName.charAt(0).toUpperCase();
+function priceCardHTML(item,highlight,bestByKey){
+  const up=unitPrice(item);
+  const dn=displayName(item);
+  const initial=dn.charAt(0).toUpperCase();
+  const key=prodKey(item.name,item.brand);
+  const bestItem=bestByKey?bestByKey[key]:null;
+  const isBest=bestItem&&bestItem.id===item.id;
   const tags=[];
+  if(isBest) tags.push(`<span class="tag best">⭐ Meilleur prix</span>`);
   if(item.archived) tags.push(`<span class="tag coral">Ancien prix</span>`);
   if(item.brand) tags.push(`<span class="tag accent">${item.brand}</span>`);
   if(item.weight>0) tags.push(`<span class="tag gold">${item.weight} ${item.weightUnit}</span>`);
   if(item.category) tags.push(`<span class="tag coral">${item.category}</span>`);
-  tags.push(`<span class="tag grey">${formatDate(item.date)}</span>`);
+  tags.push(`<span class="tag grey">${fDate(item.date)}</span>`);
   if(item.note) tags.push(`<span class="tag grey">${item.note}</span>`);
 
-  return `<div class="price-card${highlight?' highlight':''}">
+  // Comparison bar
+  let barHTML='';
+  if(bestItem&&!isBest&&bestItem.price>0){
+    const bup=unitPrice(bestItem);
+    const pct=Math.min(100,Math.round((up/bup)*100));
+    const color=pct<=110?'#db9424':'#d44040';
+    barHTML=`<div class="card-bar">
+      <div class="card-bar-track"><div class="card-bar-fill" style="width:${Math.min(pct,100)}%;background:${color}"></div></div>
+      <div class="card-bar-label"><span>${upText(bestItem)} (meilleur)</span><span>+${pct-100}%</span></div>
+    </div>`;
+  }
+
+  return`<div class="price-card${highlight?' highlight':''}" onclick="openDetail('${item.id}')">
     <div class="pc-header">
       <div class="pc-avatar${highlight?' hl':''}">${initial}</div>
-      <div class="pc-name">${displayName}</div>
-      <div class="pc-unit-price${highlight?' hl':''}">${up}</div>
+      <div class="pc-name">${dn}</div>
+      <div class="pc-unit-price${highlight?' hl':''}">${upText(item)}</div>
     </div>
-    <div class="pc-details">
-      <span>🏪 ${item.store}</span>
-      <span>${formatCurrency(item.price)}</span>
-      <span>pour ${item.quantity} ${item.unit}</span>
-    </div>
+    <div class="pc-details"><span>🏪 ${item.store}</span><span>${fCur(item.price)}</span><span>pour ${item.quantity} ${item.unit}</span></div>
     <div class="pc-tags">${tags.join('')}</div>
-    <div class="pc-actions">
+    ${barHTML}
+    <div class="pc-actions" onclick="event.stopPropagation()">
       <button class="btn-edit" onclick="openEdit('${item.id}')">✏ Modifier</button>
       <button class="btn-danger" onclick="confirmDelete('${item.id}')">🗑 Supprimer</button>
     </div>
   </div>`;
 }
 
-// ── HISTORY TAB ───────────────────────────────────────
+// ── DETAIL MODAL ──────────────────────────────────────
+function openDetail(id){
+  const item=items.find(i=>i.id===id);if(!item)return;
+  const dn=displayName(item);
+  const key=prodKey(item.name,item.brand);
+  const allForProduct=items.filter(i=>prodKey(i.name,i.brand)===key).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const activeForProduct=allForProduct.filter(i=>!i.archived);
+
+  // Best per store
+  const storeMap={};
+  activeForProduct.forEach(i=>{
+    const k=i.store;
+    if(!storeMap[k]||unitPrice(i)<unitPrice(storeMap[k])) storeMap[k]=i;
+  });
+  const storeRows=Object.values(storeMap).sort((a,b)=>unitPrice(a)-unitPrice(b));
+  const bestUp=storeRows[0]?unitPrice(storeRows[0]):0;
+
+  // Chart data — price over time
+  const chartItems=allForProduct.filter(i=>i.price>0).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  let chartHTML='';
+  if(chartItems.length>=2){
+    const ups=chartItems.map(i=>unitPrice(i));
+    const minU=Math.min(...ups),maxU=Math.max(...ups);
+    const range=maxU-minU||1;
+    const W=300,H=100,PAD=10;
+    const pts=chartItems.map((item,i)=>{
+      const x=PAD+(i/(chartItems.length-1))*(W-2*PAD);
+      const y=H-PAD-((unitPrice(item)-minU)/range)*(H-2*PAD);
+      return`${x},${y}`;
+    }).join(' ');
+    chartHTML=`<div class="detail-section">
+      <div class="detail-section-title">Évolution du prix unitaire</div>
+      <div class="chart-wrap">
+        <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+          <polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>
+          ${chartItems.map((it,i)=>{
+            const x=PAD+(i/(chartItems.length-1))*(W-2*PAD);
+            const y=H-PAD-((unitPrice(it)-minU)/range)*(H-2*PAD);
+            return`<circle cx="${x}" cy="${y}" r="3" fill="var(--accent)"/>`;
+          }).join('')}
+        </svg>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);padding:0 2px">
+        <span>${fDate(chartItems[0].date)}</span><span>${fDate(chartItems[chartItems.length-1].date)}</span>
+      </div>
+    </div>`;
+  }
+
+  const storesHTML=storeRows.map(i=>{
+    const isBest=unitPrice(i)===bestUp;
+    const pct=bestUp>0?Math.round((unitPrice(i)/bestUp)*100):100;
+    return`<div class="detail-store-row">
+      <div><div class="detail-store-name">${i.store}${isBest?' ⭐':''}</div><div class="detail-store-date">${fDate(i.date)}</div></div>
+      <div class="detail-store-price">${upText(i)}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('detail-modal-title').textContent=dn;
+  document.getElementById('detail-modal-body').innerHTML=`
+    ${chartHTML}
+    <div class="detail-section">
+      <div class="detail-section-title">Prix par magasin</div>
+      <div>${storesHTML||'<div style="color:var(--muted);font-size:13px">Aucune donnée</div>'}</div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Informations</div>
+      <div class="stats-block" style="margin:0">
+        <div class="stats-row"><span class="stats-key">Catégorie</span><span class="stats-val">${item.category||'—'}</span></div>
+        <div class="stats-row"><span class="stats-key">Poids</span><span class="stats-val">${item.weight>0?`${item.weight} ${item.weightUnit}`:'—'}</span></div>
+        <div class="stats-row"><span class="stats-key">Encodages</span><span class="stats-val">${allForProduct.length}</span></div>
+      </div>
+    </div>
+    <button class="btn-edit" style="width:100%;padding:10px;border-radius:10px;font-size:14px;margin-top:8px" onclick="closeDetail();openEdit('${item.id}')">✏ Modifier cet encodage</button>
+  `;
+  document.getElementById('detail-modal').classList.add('open');
+}
+
+function closeDetail(){document.getElementById('detail-modal').classList.remove('open');}
+
+// ── HISTORY ───────────────────────────────────────────
 function renderHistory(){
-  // Stats
+  const q=norm(document.getElementById('hist-search').value||'');
   const ai=activeItems();
   const stores=new Set(ai.map(i=>i.store).filter(Boolean));
   const latest=ai.sort((a,b)=>new Date(b.date)-new Date(a.date))[0];
@@ -681,79 +722,108 @@ function renderHistory(){
     <div class="stats-row"><span class="stats-key">Articles actifs</span><span class="stats-val">${ai.length}</span></div>
     <div class="stats-row"><span class="stats-key">Anciens prix conservés</span><span class="stats-val">${archivedItems().length}</span></div>
     <div class="stats-row"><span class="stats-key">Magasins</span><span class="stats-val">${stores.size}</span></div>
-    ${latest?`<div class="stats-row"><span class="stats-key">Dernier encodage</span><span class="stats-val">${formatDate(latest.date)}</span></div>`:''}
+    ${latest?`<div class="stats-row"><span class="stats-key">Dernier encodage</span><span class="stats-val">${fDate(latest.date)}</span></div>`:''}
   </div>`;
 
-  // Group by product
   const grouped={};
   items.forEach(i=>{
-    const key=productKey(i.name,i.brand);
-    if(!grouped[key]) grouped[key]=[];
+    const key=prodKey(i.name,i.brand);
+    if(!grouped[key])grouped[key]=[];
     grouped[key].push(i);
   });
 
-  const histories=Object.values(grouped)
+  let histories=Object.values(grouped)
     .map(arr=>arr.sort((a,b)=>new Date(b.date)-new Date(a.date)))
     .sort((a,b)=>(a[0].name||'').localeCompare(b[0].name||''));
 
-  html+=`<div class="slabel">Historique par produit</div>`;
+  // Filter by search
+  if(q){
+    histories=histories.filter(arr=>
+      [arr[0].name,arr[0].brand,arr[0].category,...arr.map(i=>i.store)].some(f=>norm(f||'').includes(q))
+    );
+  }
+
+  html+=`<div class="slabel">Historique par produit (${histories.length})</div>`;
   histories.forEach((arr,idx)=>{
     const active=arr.find(i=>!i.archived);
-    const displayName=arr[0].brand?`${arr[0].name} - ${arr[0].brand}`:arr[0].name;
-    const summaryText=active
-      ?`Actuel: ${unitPriceText(active)} chez ${active.store} — ${arr.length} prix conservé(s)`
-      :`${arr.length} ancien(s) prix conservé(s)`;
-
-    const rowsHTML=arr.map(item=>{
-      const isArc=item.archived;
-      return `<div class="hist-row">
-        <div class="hist-date${isArc?' archived':''}">${formatDate(item.date)}<div class="hist-store">${item.store}</div></div>
+    const dn=arr[0].brand?`${arr[0].name} - ${arr[0].brand}`:arr[0].name;
+    const summaryText=active?`Actuel: ${upText(active)} chez ${active.store} — ${arr.length} prix`:`${arr.length} ancien(s) prix`;
+    const rowsHTML=arr.map(item=>`
+      <div class="hist-row">
+        <div class="hist-date${item.archived?' archived':''}">${fDate(item.date)}<div class="hist-store">${item.store}</div></div>
         <div class="hist-info">
-          <div class="hist-price">${unitPriceText(item)}</div>
-          <div class="hist-store">Prix payé: ${formatCurrency(item.price)} pour ${item.quantity} ${item.unit}</div>
-          ${isArc?'<span class="tag coral" style="margin-top:3px;display:inline-block">Ancien prix</span>':''}
+          <div class="hist-price">${upText(item)}</div>
+          <div class="hist-store">${fCur(item.price)} pour ${item.quantity} ${item.unit}</div>
+          ${item.archived?'<span class="tag coral" style="margin-top:3px;display:inline-block">Ancien prix</span>':''}
           <div class="hist-actions">
             <button class="btn-edit" onclick="openEdit('${item.id}')">✏ Modifier</button>
             <button class="btn-danger" onclick="confirmDelete('${item.id}')">🗑 Supprimer</button>
           </div>
         </div>
-      </div>`;
-    }).join('');
-
+      </div>`).join('');
     html+=`<div class="hist-card">
-      <div class="hist-header" onclick="toggleHist('hist-${idx}')">
-        <div style="flex:1"><div class="hist-title">${displayName}</div><div class="hist-sub">${summaryText}</div></div>
-        <div class="hist-arrow" id="arrow-hist-${idx}">›</div>
+      <div class="hist-header" onclick="toggleHist('hb-${idx}')">
+        <div style="flex:1"><div class="hist-title">${dn}</div><div class="hist-sub">${summaryText}</div></div>
+        <div class="hist-arrow" id="ha-${idx}">›</div>
       </div>
-      <div class="hist-body" id="hist-${idx}">${rowsHTML}</div>
+      <div class="hist-body" id="hb-${idx}">${rowsHTML}</div>
     </div>`;
   });
 
-  html+=`<div class="slabel">Tous les prix</div>`;
-  items.forEach(item=>{html+=priceCardHTML(item,false);});
-
+  if(histories.length===0) html+=`<div class="empty-state">🔍 Aucun résultat pour cette recherche</div>`;
   document.getElementById('hist-content').innerHTML=html;
 }
 
 function toggleHist(id){
-  const body=document.getElementById(id);
-  const arrow=document.getElementById('arrow-'+id);
-  const isOpen=body.classList.contains('open');
-  body.classList.toggle('open',!isOpen);
-  arrow.classList.toggle('open',!isOpen);
+  document.getElementById(id).classList.toggle('open');
+  const idx=id.replace('hb-','');
+  document.getElementById('ha-'+idx).classList.toggle('open');
 }
 
-// ── CSV TAB ───────────────────────────────────────────
+// ── CSV & BACKUP ───────────────────────────────────────
 function renderCSV(){
   document.getElementById('export-btn').disabled=items.length===0;
+}
+
+function backupJSON(){
+  const data=JSON.stringify({version:2,date:todayISO(),items},null,2);
+  const blob=new Blob([data],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`carnet-prix-backup-${todayISO()}.json`;a.click();
+  URL.revokeObjectURL(url);
+  toast('✓ Sauvegarde JSON téléchargée');
+}
+
+function restoreJSON(inp){
+  const file=inp.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      const restored=data.items||data;
+      if(!Array.isArray(restored))throw new Error('Format invalide');
+      showAlert('Restaurer la sauvegarde ?',
+        `${restored.length} articles seront restaurés. Toutes les données actuelles seront remplacées.`,
+        [
+          {label:'Restaurer',style:'danger',action:()=>{
+            items=restored;saveItems(items);
+            toast(`✓ ${restored.length} articles restaurés`);
+            renderCSV();
+          }},
+          {label:'Annuler',style:'secondary'}
+        ]);
+    }catch(err){toast('⚠️ Fichier JSON invalide');}
+    inp.value='';
+  };
+  reader.readAsText(file);
 }
 
 function exportCSV(){
   const headers=['article','magasin','marque','prix','quantite','unite','poids','unite_poids','categorie','note','date'];
   const rows=activeItems().map(i=>[
-    i.name,i.store,i.brand||'',
-    i.price.toFixed(2),(i.quantity||1).toFixed(3),i.unit||'piece',
-    (i.weight||0).toFixed(3),i.weightUnit||'g',
+    i.name,i.store,i.brand||'',i.price.toFixed(2),(i.quantity||1).toFixed(3),
+    i.unit||'piece',(i.weight||0).toFixed(3),i.weightUnit||'g',
     i.category||'',i.note||'',i.date||''
   ].map(csvEsc).join(','));
   const csv=[headers.join(','),...rows].join('\n');
@@ -765,11 +835,7 @@ function exportCSV(){
   toast('✓ CSV exporté');
 }
 
-function csvEsc(v){
-  const s=String(v);
-  if(s.includes(',')||s.includes('"')||s.includes('\n')) return `"${s.replace(/"/g,'""')}"`;
-  return s;
-}
+function csvEsc(v){const s=String(v);if(s.includes(',')||s.includes('"')||s.includes('\n'))return`"${s.replace(/"/g,'""')}"`;return s;}
 
 function importCSV(inp){
   const file=inp.files[0];if(!file)return;
@@ -784,25 +850,16 @@ function importCSV(inp){
       const get=k=>{const i=header.indexOf(k);return i>=0?(cols[i]||'').trim():''};
       const price=parseFloat(get('prix').replace(',','.'));
       const name=get('article');
-      if(!name||isNaN(price)) return null;
-      return {
-        id:Date.now().toString()+Math.random(),
-        name,store:get('magasin'),brand:get('marque'),
-        price,quantity:parseFloat(get('quantite').replace(',','.'))||1,
-        unit:get('unite')||'piece',
-        weight:parseFloat(get('poids').replace(',','.'))||0,
-        weightUnit:get('unite_poids')||'g',
-        category:get('categorie'),note:get('note'),
-        date:get('date')||todayISO(),archived:false
-      };
+      if(!name||isNaN(price))return null;
+      return{id:Date.now().toString()+Math.random(),name,store:get('magasin'),brand:get('marque'),
+        price,quantity:parseFloat(get('quantite').replace(',','.'))||1,unit:get('unite')||'piece',
+        weight:parseFloat(get('poids').replace(',','.'))||0,weightUnit:get('unite_poids')||'g',
+        category:get('categorie'),note:get('note'),date:get('date')||todayISO(),archived:false};
     }).filter(Boolean);
-
-    items=drafts;
-    saveItems(items);
+    items=drafts;saveItems(items);
     document.getElementById('csv-summary').style.display='block';
-    document.getElementById('csv-summary').textContent=`✓ Données remplacées : ${drafts.length} ligne(s) importée(s).`;
-    inp.value='';
-    toast(`✓ ${drafts.length} articles importés`);
+    document.getElementById('csv-summary').textContent=`✓ ${drafts.length} ligne(s) importée(s).`;
+    inp.value='';toast(`✓ ${drafts.length} articles importés`);
   };
   reader.readAsText(file);
 }
@@ -811,10 +868,8 @@ function parseCSVRow(line,delim){
   const values=[];let val='';let quoted=false;
   for(let i=0;i<line.length;i++){
     const c=line[i];
-    if(c==='"'){
-      if(quoted&&line[i+1]==='"'){val+='"';i++;}
-      else quoted=!quoted;
-    } else if(c===delim&&!quoted){values.push(val);val='';}
+    if(c==='"'){if(quoted&&line[i+1]==='"'){val+='"';i++;}else quoted=!quoted;}
+    else if(c===delim&&!quoted){values.push(val);val='';}
     else val+=c;
   }
   values.push(val);return values;
@@ -837,70 +892,47 @@ function openEdit(id){
   document.getElementById('edit-modal').classList.add('open');
 }
 
-function closeEdit(){
-  document.getElementById('edit-modal').classList.remove('open');
-  editingId=null;
-}
+function closeEdit(){document.getElementById('edit-modal').classList.remove('open');editingId=null;}
 
 function saveEdit(){
   const item=items.find(i=>i.id===editingId);if(!item)return;
   const name=(document.getElementById('e-name').value||'').trim();
   const store=(document.getElementById('e-store').value||'').trim();
   const price=parseNum(document.getElementById('e-price').value);
-  if(!name||!store||!price){toast('⚠️ Article, magasin et prix sont obligatoires');return;}
-
+  if(!name||!store||!price){toast('⚠️ Article, magasin et prix obligatoires');return;}
   if(!item.archived){
-    // Archive old, create new
     item.archived=true;
-    const newItem={
-      id:Date.now().toString(),
-      name,brand:(document.getElementById('e-brand').value||'').trim(),
-      store,price,
-      quantity:parseNum(document.getElementById('e-quantity').value)||1,
+    items.unshift({id:Date.now().toString(),name,
+      brand:(document.getElementById('e-brand').value||'').trim(),
+      store,price,quantity:parseNum(document.getElementById('e-quantity').value)||1,
       unit:document.getElementById('e-unit').value,
       weight:parseNum(document.getElementById('e-weight').value)||0,
       weightUnit:document.getElementById('e-weightunit').value,
       category:(document.getElementById('e-category').value||'').trim(),
       note:(document.getElementById('e-note').value||'').trim(),
-      date:item.date,archived:false
-    };
-    items.unshift(newItem);
+      date:item.date,archived:false});
   } else {
-    // Update archived directly
-    Object.assign(item,{
-      name,brand:(document.getElementById('e-brand').value||'').trim(),
-      store,price,
-      quantity:parseNum(document.getElementById('e-quantity').value)||1,
+    Object.assign(item,{name,brand:(document.getElementById('e-brand').value||'').trim(),
+      store,price,quantity:parseNum(document.getElementById('e-quantity').value)||1,
       unit:document.getElementById('e-unit').value,
       weight:parseNum(document.getElementById('e-weight').value)||0,
       weightUnit:document.getElementById('e-weightunit').value,
       category:(document.getElementById('e-category').value||'').trim(),
-      note:(document.getElementById('e-note').value||'').trim(),
-    });
+      note:(document.getElementById('e-note').value||'').trim()});
   }
-  saveItems(items);closeEdit();
-  renderCurrentTab();
-  toast('✓ Prix modifié');
+  saveItems(items);closeEdit();renderCurrentTab();toast('✓ Prix modifié');
 }
 
 function confirmDelete(id){
   const item=items.find(i=>i.id===id);if(!item)return;
-  const displayName=item.brand?`${item.name} - ${item.brand}`:item.name;
-  showAlert(
-    'Supprimer ce prix ?',
-    `"${displayName}" chez ${item.store}, ${formatCurrency(item.price)} le ${formatDate(item.date)}, sera effacé définitivement.`,
-    [
-      {label:'Supprimer',style:'danger',action:()=>doDelete(id)},
-      {label:'Annuler',style:'secondary'}
-    ]
-  );
+  const dn=displayName(item);
+  showAlert('Supprimer ce prix ?',
+    `"${dn}" chez ${item.store}, ${fCur(item.price)} le ${fDate(item.date)}, sera effacé définitivement.`,
+    [{label:'Supprimer',style:'danger',action:()=>doDelete(id)},{label:'Annuler',style:'secondary'}]);
 }
 
 function doDelete(id){
-  items=items.filter(i=>i.id!==id);
-  saveItems(items);
-  renderCurrentTab();
-  toast('✓ Prix supprimé');
+  items=items.filter(i=>i.id!==id);saveItems(items);renderCurrentTab();toast('✓ Prix supprimé');
 }
 
 function renderCurrentTab(){
