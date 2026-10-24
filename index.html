@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Carnet de prix</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F3F5F7;
+  --surface: #FFFFFF;
+  --ink: #1A1E23;
+  --muted: #5E6772;
+  --line: #DDE2E7;
+  --tag: #FFD43B;
+  --tag-ink: #1A1E23;
+  --up: #C42B2B;
+  --down: #1D7A49;
+  --focus: #2563EB;
+  --s1: #2563EB; --s2: #D97706; --s3: #7C3AED; --s4: #0D9488; --s5: #DB2777;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131518; --surface: #1D2024; --ink: #ECEEF1; --muted: #9AA3AD; --line: #2E333A;
+    --tag: #F5C824; --tag-ink: #16181B; --up: #F07167; --down: #4CC38A; --focus: #7AA7FF;
+    --s1: #7AA7FF; --s2: #F5A524; --s3: #B794F6; --s4: #2DD4BF; --s5: #F472B6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131518; --surface: #1D2024; --ink: #ECEEF1; --muted: #9AA3AD; --line: #2E333A;
+  --tag: #F5C824; --tag-ink: #16181B; --up: #F07167; --down: #4CC38A; --focus: #7AA7FF;
+  --s1: #7AA7FF; --s2: #F5A524; --s3: #B794F6; --s4: #2DD4BF; --s5: #F472B6;
+  color-scheme: dark;
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+*, *::before, *::after { box-sizing: inherit; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 16px/1.45 "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 10; background: var(--bg);
+}
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.wrap { max-width: 720px; margin: 0 auto; padding: 0 16px 140px; }
+
+/* En-tête */
+header {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--bg); padding: 14px 0 10px;
+}
+.title-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+h1 {
+  font: 700 2rem/1 "Barlow Condensed", "Arial Narrow", sans-serif; margin: 0; letter-spacing: -0.01em;
+}
+.count { color: var(--muted); font-size: .9rem; }
+.search {
+  margin-top: 12px; width: 100%; padding: 11px 14px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--surface);
+}
+.controls { display: flex; gap: 8px; margin-top: 10px; align-items: center; flex-wrap: wrap; }
+.seg { display: inline-flex; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+.seg button {
+  border: 0; background: none; padding: 6px 12px; border-radius: 7px; cursor: pointer; font-weight: 500; color: var(--muted);
+}
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.sort { margin-left: auto; display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: .9rem; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.sort select { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 5px 8px; }
+
+/* Étiquette de prix : l'élément signature */
+.tag {
+  display: inline-flex; align-items: flex-start; background: var(--tag); color: var(--tag-ink);
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-weight: 700;
+  padding: 2px 8px 3px 9px; border-radius: 4px 4px 4px 4px; line-height: 1;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 9px 100%, 0 calc(100% - 9px));
+  white-space: nowrap;
+}
+.tag .eu { font-size: 1.9rem; }
+.tag .ct { font-size: 1rem; margin-top: 3px; margin-left: 1px; }
+.tag .cur { font-size: .85rem; margin-top: 4px; margin-left: 2px; font-weight: 600; }
+.tag.big .eu { font-size: 3.4rem; }
+.tag.big .ct { font-size: 1.6rem; margin-top: 5px; }
+.tag.big .cur { font-size: 1.2rem; margin-top: 7px; }
+.tag.plain { background: transparent; clip-path: none; padding: 0; color: var(--ink); }
+.tag.plain .eu { font-size: 1.5rem; }
+
+/* Listes */
+.list { list-style: none; margin: 8px 0 0; padding: 0; }
+.row {
+  display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;
+  padding: 14px 4px; border-bottom: 1px solid var(--line); cursor: pointer;
+  background: none; border-left: 0; border-right: 0; border-top: 0; width: 100%; text-align: left;
+}
+.row:hover { background: color-mix(in srgb, var(--surface) 60%, transparent); }
+.row .name { font-weight: 600; font-size: 1.05rem; overflow-wrap: anywhere; }
+.row .meta { color: var(--muted); font-size: .88rem; margin-top: 2px; }
+.row .right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.delta { font-size: .82rem; font-weight: 600; white-space: nowrap; }
+.delta.up { color: var(--up); }
+.delta.down { color: var(--down); }
+.best { color: var(--down); font-weight: 600; }
+.day { margin: 22px 4px 2px; font: 600 .95rem "Barlow Condensed", "Arial Narrow", sans-serif; color: var(--muted); }
+
+/* État vide */
+.empty { padding: 28px 4px; }
+.empty h2 { font: 700 1.6rem/1.1 "Barlow Condensed", "Arial Narrow", sans-serif; margin: 0 0 14px; }
+.steps { margin: 0; padding: 0; list-style: none; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 34px 1fr; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); }
+.steps li::before {
+  content: counter(s); font: 700 1.4rem/1 "Barlow Condensed", "Arial Narrow", sans-serif;
+  background: var(--tag); color: var(--tag-ink); width: 28px; height: 28px; display: grid; place-items: center; border-radius: 4px;
+}
+.steps b { display: block; }
+.steps span { color: var(--muted); }
+
+/* Barre d'actions */
+.actions {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 6;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, var(--bg) 70%, transparent);
+}
+.actions .inner { max-width: 720px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+.actions .btn { white-space: nowrap; }
+.btn {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 12px;
+  padding: 14px 18px; font-weight: 600; cursor: pointer; min-height: 52px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.btn.danger { color: var(--up); }
+.btn[disabled] { opacity: .45; cursor: not-allowed; }
+.btn svg { width: 22px; height: 22px; flex: none; }
+
+/* Fenêtres */
+dialog {
+  border: 0; padding: 0; background: var(--surface); color: var(--ink);
+  width: min(560px, 100%); max-height: 100%; border-radius: 16px;
+}
+dialog::backdrop { background: rgb(0 0 0 / .45); }
+@media (max-width: 600px) {
+  dialog { width: 100%; max-width: 100%; height: 100%; max-height: 100%; margin: 0; border-radius: 0; }
+}
+.dlg { display: flex; flex-direction: column; height: 100%; max-height: 100dvh; }
+.dlg-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 12px; border-bottom: 1px solid var(--line);
+}
+.dlg-head h2 { margin: 0; font: 700 1.4rem/1.1 "Barlow Condensed", "Arial Narrow", sans-serif; }
+.dlg-body { padding: 16px; overflow: auto; flex: 1; }
+.dlg-foot {
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line);
+  display: flex; gap: 10px;
+}
+.dlg-foot .btn { flex: 1; }
+.link { background: none; border: 0; color: var(--focus); font-weight: 600; cursor: pointer; padding: 8px; }
+
+/* Formulaire */
+.field { display: block; margin-bottom: 14px; }
+.field > span { display: block; font-size: .88rem; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
+.field input {
+  width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg);
+}
+.field input.read { box-shadow: inset 0 -3px 0 var(--tag); }
+.field.price input { font: 700 1.8rem "Barlow Condensed", "Arial Narrow", sans-serif; padding: 8px 12px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.scanbox {
+  display: grid; grid-template-columns: 72px 1fr; gap: 12px; align-items: center;
+  padding: 10px; border: 1px solid var(--line); border-radius: 12px; margin-bottom: 16px; background: var(--bg);
+}
+.scanbox img { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; }
+.scanbox .st { font-weight: 600; }
+.scanbox .sub { color: var(--muted); font-size: .88rem; }
+.spinner {
+  width: 18px; height: 18px; border: 2.5px solid var(--line); border-top-color: var(--ink); border-radius: 50%;
+  display: inline-block; vertical-align: -3px; margin-right: 6px; animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2.4s; } }
+.hint { font-size: .85rem; color: var(--muted); margin: -6px 0 14px; }
+.seg-full { display: flex; width: 100%; }
+.seg-full button { flex: 1; padding: 9px 4px; font-size: .9rem; }
+.qte { display: grid; grid-template-columns: 1fr auto; gap: 6px; }
+.qte input { width: 100%; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); min-width: 0; }
+.qte select { padding: 10px 6px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+.qte input.read { box-shadow: inset 0 -3px 0 var(--tag); }
+.calc { margin: -4px 0 14px; padding: 10px 12px; border-radius: 10px; background: color-mix(in srgb, var(--tag) 22%, var(--surface)); font-size: .95rem; }
+.calc .muted { color: var(--muted); }
+.unitfix { margin-top: 6px; color: var(--up); font-size: .9rem; }
+.unitfix .link { padding: 4px 0; font-size: .9rem; }
+.prev { margin: 0 0 16px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); }
+.prev-head { font: 600 1.05rem "Barlow Condensed", "Arial Narrow", sans-serif; margin-bottom: 6px; }
+.cmp { font-weight: 600; padding: 8px 10px; border-radius: 8px; margin-bottom: 8px; font-size: .92rem; }
+.cmp.up { color: var(--up); background: color-mix(in srgb, var(--up) 12%, transparent); }
+.cmp.down { color: var(--down); background: color-mix(in srgb, var(--down) 12%, transparent); }
+.cmp.same { color: var(--muted); background: var(--surface); }
+.prev-list { list-style: none; margin: 0; padding: 0; font-size: .9rem; }
+.prev-list li { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; padding: 6px 0; border-top: 1px solid var(--line); }
+.prev-list li span:first-child { color: var(--muted); white-space: nowrap; }
+.prev-list li.ref { font-weight: 600; }
+.prev-list .n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.prev-min, .prev-more { font-size: .85rem; color: var(--muted); margin-top: 6px; }
+.tag .per { font-size: .8rem; margin-top: 5px; margin-left: 1px; font-weight: 600; }
+
+/* Fiche produit */
+.hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+.hero .who { color: var(--muted); font-size: .92rem; }
+.chart { width: 100%; overflow-x: auto; margin: 14px 0 6px; }
+.chart svg { display: block; width: 100%; height: auto; min-width: 280px; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: .85rem; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: 0; }
+h3 { font: 600 1.15rem "Barlow Condensed", "Arial Narrow", sans-serif; margin: 22px 0 4px; }
+table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+td, th { text-align: left; padding: 9px 4px; border-bottom: 1px solid var(--line); }
+th { font-weight: 500; color: var(--muted); font-size: .85rem; }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+  background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 10px; z-index: 20;
+  max-width: calc(100% - 32px); font-size: .95rem;
+}
+.loading { padding: 40px 4px; color: var(--muted); }
+.head-right { display: flex; align-items: center; gap: 4px; }
+.iconbtn { background: none; border: 1px solid var(--line); border-radius: 9px; padding: 6px 10px; cursor: pointer; font-weight: 600; font-size: .9rem; display: inline-flex; align-items: center; gap: 6px; }
+.iconbtn svg { width: 17px; height: 17px; }
+.iconbtn { white-space: nowrap; flex: none; }
+.title-row h1 { min-width: 0; }
+@media (max-width: 440px) { .count { display: none; } h1 { font-size: 1.75rem; } .iconbtn { padding: 6px 8px; font-size: .85rem; } }
+.panel { padding: 4px 0 18px; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.panel:last-child { border-bottom: 0; margin-bottom: 0; }
+.panel h3 { margin-top: 0; }
+.panel p { margin: 4px 0 12px; color: var(--muted); }
+.panel .btn { width: 100%; }
+.cols { font-size: .88rem; color: var(--muted); margin: 0 0 12px; }
+.cols b { color: var(--ink); font-weight: 600; }
+.summary { padding: 12px; border-radius: 10px; background: var(--bg); border: 1px solid var(--line); margin: 12px 0; }
+.summary strong { display: block; font-size: 1.05rem; }
+.summary ul { margin: 6px 0 0; padding-left: 18px; color: var(--muted); font-size: .88rem; }
+.preview { overflow-x: auto; margin: 0 0 12px; }
+.preview table { font-size: .85rem; min-width: 420px; }
+.note { font-size: .82rem; color: var(--muted); margin-top: 18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title-row">
+      <h1>Carnet de prix</h1>
+      <div class="head-right">
+        <span class="count" id="count"></span>
+        <button type="button" class="iconbtn" id="dataBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10l5 5 5-5M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg>
+          Import / export
+        </button>
+      </div>
+    </div>
+    <input class="search" id="q" type="search" placeholder="Rechercher un produit, une marque, un magasin" autocomplete="off">
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Affichage">
+        <button type="button" data-view="produits" aria-pressed="true">Produits</button>
+        <button type="button" data-view="historique" aria-pressed="false">Historique</button>
+      </div>
+      <label class="sort" id="sortWrap"><span class="sr">Trier par</span>
+        <select id="sort">
+          <option value="recent">Récent</option>
+          <option value="article">Article</option>
+          <option value="prix">Prix</option>
+          <option value="hausse">Hausses</option>
+        </select>
+      </label>
+    </div>
+  </header>
+  <main id="main"><p class="loading">Ouverture du carnet…</p></main>
+  <p class="note" id="storeNote"></p>
+</div>
+
+<div class="actions">
+  <div class="inner">
+    <button class="btn primary" id="scanBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 8v8M10 8v8M13 8v8M16 8v8"/></svg>
+      Scanner l’étiquette
+    </button>
+    <button class="btn" id="manualBtn" type="button" aria-label="Saisir un prix à la main">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      Saisir
+    </button>
+  </div>
+</div>
+<input type="file" id="photo" accept="image/*" capture="environment" hidden>
+
+<!-- Saisie / modification d'un relevé -->
+<dialog id="formDlg" aria-labelledby="formTitle">
+  <form class="dlg" id="form" method="dialog" novalidate>
+    <div class="dlg-head">
+      <h2 id="formTitle">Nouveau prix</h2>
+      <button type="button" class="link" data-close>Annuler</button>
+    </div>
+    <div class="dlg-body">
+      <div class="scanbox" id="scanbox" hidden>
+        <img id="scanImg" alt="Photo de l’étiquette">
+        <div><div class="st" id="scanStatus"></div><div class="sub" id="scanSub"></div></div>
+      </div>
+      <label class="field"><span>Produit</span>
+        <input name="produit" list="dlProduits" required autocomplete="off" placeholder="ex. Lait demi-écrémé 1 L"></label>
+      <div class="grid2">
+        <label class="field"><span>Marque</span>
+          <input name="marque" list="dlMarques" autocomplete="off" placeholder="facultatif"></label>
+        <label class="field"><span>Magasin</span>
+          <input name="magasin" list="dlMagasins" autocomplete="off" placeholder="ex. Delhaize Berchem"></label>
+      </div>
+      <div class="field"><span>Type de prix</span>
+        <div class="seg seg-full" role="group" aria-label="Type de prix" id="modeSeg">
+          <button type="button" data-mode="paquet" aria-pressed="true">Prix du paquet</button>
+          <button type="button" data-mode="kg" aria-pressed="false">Prix au kg</button>
+          <button type="button" data-mode="l" aria-pressed="false">Prix au litre</button>
+        </div>
+      </div>
+      <div class="grid2">
+        <label class="field price"><span id="prixLabel">Prix (€)</span>
+          <input name="prix" inputmode="decimal" autocomplete="off" placeholder="0,00"></label>
+        <div class="field"><span id="qteLabel">Contenu du paquet</span>
+          <div class="qte">
+            <input name="qteValeur" inputmode="decimal" autocomplete="off" placeholder="ex. 500" aria-label="Quantité">
+            <select name="qteUnite" aria-label="Unité"></select>
+          </div>
+        </div>
+      </div>
+      <div class="calc" id="calcLine" hidden></div>
+      <div class="prev" id="prevPanel" hidden></div>
+      <div class="grid2">
+        <label class="field"><span>Date</span>
+          <input name="date" type="date"></label>
+        <label class="field"><span>Code-barres</span>
+          <input name="ean" inputmode="numeric" autocomplete="off" placeholder="facultatif"></label>
+      </div>
+      <p class="hint" id="readHint" hidden>Les champs soulignés en jaune ont été lus sur l’étiquette. Vérifie-les avant d’enregistrer.</p>
+      <button type="button" class="btn danger" id="delBtn" hidden style="width:100%">Supprimer ce relevé</button>
+    </div>
+    <div class="dlg-foot">
+      <button type="submit" class="btn primary" id="saveBtn">Enregistrer</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Fiche produit -->
+<dialog id="prodDlg" aria-labelledby="prodTitle">
+  <div class="dlg">
+    <div class="dlg-head">
+      <h2 id="prodTitle"></h2>
+      <button type="button" class="link" data-close>Fermer</button>
+    </div>
+    <div class="dlg-body" id="prodBody"></div>
+    <div class="dlg-foot"><button type="button" class="btn primary" id="prodAdd">Ajouter un prix pour ce produit</button></div>
+  </div>
+</dialog>
+
+<!-- Import / export -->
+<dialog id="dataDlg" aria-labelledby="dataTitle">
+  <div class="dlg">
+    <div class="dlg-head">
+      <h2 id="dataTitle">Importer / exporter</h2>
+      <button type="button" class="link" data-close>Fermer</button>
+    </div>
+    <div class="dlg-body">
+      <section class="panel">
+        <h3>Exporter</h3>
+        <p id="exportInfo"></p>
+        <button type="button" class="btn primary" id="exportBtn">Exporter en CSV</button>
+      </section>
+      <section class="panel">
+        <h3>Importer</h3>
+        <p>Ajoute des relevés depuis un fichier CSV (Excel, Numbers, Google Sheets ou un export de ce carnet). Tes relevés actuels sont conservés ; les doublons sont ignorés.</p>
+        <p class="cols">Colonnes reconnues : <b>Produit</b> et <b>Prix</b> (obligatoires), Date, Marque, Magasin, Quantité, Prix unitaire, Unité, Code-barres. Séparateur point-virgule ou virgule ; prix avec virgule ou point ; dates au format 21/10/2026 ou 2026-10-21.</p>
+        <div id="importArea"><button type="button" class="btn" id="pickCsv">Choisir un fichier CSV</button></div>
+      </section>
+    </div>
+  </div>
+</dialog>
+<input type="file" id="csvFile" accept=".csv,text/csv,text/plain" hidden>
+
+<datalist id="dlProduits"></datalist>
+<datalist id="dlMagasins"></datalist>
+<datalist id="dlMarques"></datalist>
+
+<script>
+(() => {
+  "use strict";
+
+  // ---------- Formats ----------
+  const eur = new Intl.NumberFormat("fr-BE", { style: "currency", currency: "EUR" });
+  const num2 = new Intl.NumberFormat("fr-BE", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const dayFmt = new Intl.DateTimeFormat("fr-BE", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  const shortDate = new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short" });
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const norm = s => String(s ?? "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
+  const parseNum = s => {
+    if (s == null) return null;
+    const t = String(s).replace(/€/g, "").replace(/\s/g, "").replace(",", ".");
+    if (!t) return null;
+    const n = Number(t);
+    return Number.isFinite(n) && n >= 0 ? Math.round(n * 100) / 100 : null;
+  };
+  const todayISO = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+  const isoToTs = iso => { const [y, m, d] = iso.split("-").map(Number); return new Date(y, m - 1, d, 12).getTime(); };
+  const tsToIso = ts => { const d = new Date(ts); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+
+  function tagHTML(price, cls = "", per = null) {
+    if (price == null) return "";
+    const [eu, ct] = num2.format(price).split(",");
+    const perTxt = per ? (per === "pièce" ? "/pc" : "/" + per) : "";
+    return `<span class="tag ${cls}" aria-label="${esc(eur.format(price) + (per ? " par " + per : ""))}"><span class="eu">${eu}</span><span class="ct">,${ct}</span><span class="cur">€</span>${perTxt ? `<span class="per">${perTxt}</span>` : ""}</span>`;
+  }
+  const perLabel = u => u === "l" ? "le litre" : u === "pièce" ? "la pièce" : "le kg";
+  const perAu = u => u === "l" ? "au litre" : u === "pièce" ? "à la pièce" : "au kg";
+  const perShort = u => u ? (u === "pièce" ? " /pc" : " /" + u) : "";
+  const dateY = new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", year: "numeric" });
+
+  // ---------- État ----------
+  const state = { releves: [], view: "produits", q: "", sort: "recent", ready: false };
+  const $ = id => document.getElementById(id);
+
+  // ---------- Stockage : carnet privé (db) ou, à défaut, ce navigateur ----------
+  const LS_KEY = "carnet-de-prix.v1";
+  const Store = {
+    mode: "local", col: null,
+    async init() {
+      let db = null, user = null, uid = null;
+      if (window.claude && typeof window.claude.use === "function") {
+        try { [db, user] = await Promise.all([claude.use("db"), claude.use("user")]); } catch { db = null; }
+        if (user) { try { uid = await user.id(); } catch { uid = null; } }
+      }
+      if (db && uid) {
+        this.mode = "db";
+        this.col = db.collection("data/users/" + uid);
+        this.col.onSnapshot(
+          snap => { state.releves = snap.docs.map(d => ({ id: d.id, ...d.data() })); state.ready = true; render(); },
+          () => toast("La synchronisation s’est interrompue. Recharge la page pour la reprendre.")
+        );
+        $("storeNote").textContent = "Ton carnet est enregistré dans ton compte Claude et n’est visible que par toi.";
+      } else {
+        this.mode = "local";
+        try { state.releves = JSON.parse(localStorage.getItem(LS_KEY) || "[]"); } catch { state.releves = []; }
+        state.ready = true;
+        $("storeNote").textContent = "Ton carnet est enregistré sur cet appareil uniquement.";
+        render();
+      }
+    },
+    persistLocal() { try { localStorage.setItem(LS_KEY, JSON.stringify(state.releves)); } catch {} },
+    async save(r) {
+      const body = { ...r }; delete body.id;
+      if (this.mode === "db") {
+        const ref = r.id ? this.col.doc(r.id) : this.col.doc();
+        await ref.set(body);
+      } else {
+        const id = r.id || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random());
+        const i = state.releves.findIndex(x => x.id === id);
+        if (i >= 0) state.releves[i] = { id, ...body }; else state.releves.push({ id, ...body });
+        this.persistLocal(); render();
+      }
+    },
+    async saveMany(recs, onProgress) {
+      if (this.mode === "db") {
+        let done = 0, i = 0, failed = 0;
+        const worker = async () => {
+          while (i < recs.length) {
+            const r = recs[i++];
+            try { const { id, ...body } = r; await (id ? this.col.doc(id) : this.col.doc()).set(body); } catch (e) { failed++; if (e?.code === "quota_exceeded" || e?.code === "invalid_argument") throw e; }
+            onProgress?.(++done, recs.length);
+          }
+        };
+        await Promise.all([worker(), worker(), worker(), worker()]);
+        return failed;
+      }
+      for (const r of recs) {
+        const i = r.id ? state.releves.findIndex(x => x.id === r.id) : -1;
+        if (i >= 0) state.releves[i] = { ...r };
+        else state.releves.push({ id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random(), ...r });
+      }
+      this.persistLocal(); render(); onProgress?.(recs.length, recs.length);
+      return 0;
+    },
+    async remove(id) {
+      if (this.mode === "db") await this.col.doc(id).delete();
+      else { state.releves = state.releves.filter(x => x.id !== id); this.persistLocal(); render(); }
+    }
+  };
+
+  // ---------- Calculs ----------
+  function products() {
+    const map = new Map();
+    for (const r of state.releves) {
+      const k = norm(r.produit);
+      if (!k) continue;
+      if (!map.has(k)) map.set(k, { key: k, name: r.produit, items: [] });
+      map.get(k).items.push(r);
+    }
+    for (const p of map.values()) {
+      p.items.sort((a, b) => a.date - b.date);
+      p.last = p.items[p.items.length - 1];
+      p.name = p.last.produit;
+      // Base de comparaison : prix au kg / l quand les formats diffèrent (vrac, paquets de tailles différentes)
+      const units = new Set(p.items.map(r => r.prixUnite != null ? (r.unite || "kg") : null));
+      const sameFormat = new Set(p.items.map(r => norm(r.quantite))).size === 1;
+      p.basis = !units.has(null) && units.size === 1 && !sameFormat ? [...units][0] : null;
+      const v = p.val = r => p.basis ? r.prixUnite : r.prix;
+      // Dernier prix connu par magasin
+      const byStore = new Map();
+      for (const r of p.items) byStore.set(norm(r.magasin) || "—", r);
+      p.current = [...byStore.values()].sort((a, b) => v(a) - v(b));
+      p.best = p.current[0];
+      // Variation : dernier relevé vs relevé précédent dans le même magasin
+      const sameStore = p.items.filter(r => norm(r.magasin) === norm(p.last.magasin));
+      const prev = p.prev = sameStore.length > 1 ? sameStore[sameStore.length - 2] : null;
+      p.delta = prev && v(prev) > 0 ? { abs: v(p.last) - v(prev), pct: (v(p.last) - v(prev)) / v(prev), per: p.basis } : null;
+    }
+    return [...map.values()];
+  }
+
+  function matches(r) {
+    if (!state.q) return true;
+    const q = norm(state.q);
+    return norm(r.produit).includes(q) || norm(r.marque).includes(q) || norm(r.magasin).includes(q) || String(r.ean || "").includes(q);
+  }
+
+  function deltaHTML(d) {
+    if (!d || Math.abs(d.abs) < 0.005) return d ? `<span class="delta">= prix inchangé</span>` : "";
+    const up = d.abs > 0;
+    const pct = Math.round(Math.abs(d.pct) * 100);
+    return `<span class="delta ${up ? "up" : "down"}">${up ? "▲ +" : "▼ −"}${esc(num2.format(Math.abs(d.abs)))} €${esc(perShort(d.per))} (${pct} %)</span>`;
+  }
+
+  // ---------- Rendu ----------
+  function render() {
+    if (!state.ready) return;
+    const total = state.releves.length;
+    $("count").textContent = total ? `${total} relevé${total > 1 ? "s" : ""}` : "";
+    document.querySelectorAll(".seg [data-view]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.view === state.view)));
+    $("sortWrap").hidden = state.view !== "produits";
+    updateDatalists();
+
+    const main = $("main");
+    if (!total) { main.innerHTML = emptyHTML(); bindEmpty(); return; }
+    main.innerHTML = state.view === "produits" ? productsHTML() : historyHTML();
+  }
+
+  function emptyHTML() {
+    return `<section class="empty">
+      <h2>Ton carnet est vide</h2>
+      <ol class="steps">
+        <li><div><b>Scanne l’étiquette en magasin</b><span>Photographie l’étiquette du rayon : le prix, le prix au kilo et le nom sont lus automatiquement.</span></div></li>
+        <li><div><b>Vérifie et enregistre</b><span>Les valeurs lues sont soulignées en jaune. Corrige si besoin, indique le magasin, puis enregistre.</span></div></li>
+        <li><div><b>Compare d’un coup d’œil</b><span>Chaque produit affiche son dernier prix, la hausse ou la baisse depuis le relevé précédent, et le magasin le moins cher.</span></div></li>
+      </ol>
+      <p style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="btn" id="emptyManual">Saisir un premier prix à la main</button><button type="button" class="btn" id="emptyImport">Importer un fichier CSV</button></p>
+    </section>`;
+  }
+  function bindEmpty() { const b = $("emptyManual"); if (b) b.onclick = () => openForm(); const i = $("emptyImport"); if (i) i.onclick = () => openData(); }
+
+  function productsHTML() {
+    let list = products().filter(p => p.items.some(matches) || norm(p.name).includes(norm(state.q)));
+    const by = {
+      recent: (a, b) => b.last.date - a.last.date,
+      article: (a, b) => a.name.localeCompare(b.name, "fr", { sensitivity: "base" }),
+      prix: (a, b) => a.val(a.best) - b.val(b.best),
+      hausse: (a, b) => (b.delta?.pct ?? -Infinity) - (a.delta?.pct ?? -Infinity)
+    }[state.sort];
+    list.sort(by);
+    if (!list.length) return `<p class="loading">Aucun produit ne correspond à « ${esc(state.q)} ».</p>`;
+    return `<ul class="list">${list.map(p => {
+      const stores = p.current.length;
+      const bestNote = stores > 1
+        ? `<span class="best">Moins cher chez ${esc(p.best.magasin || "magasin inconnu")}</span>`
+        : esc(p.last.magasin || "Magasin non indiqué");
+      return `<li><button type="button" class="row" data-prod="${esc(p.key)}">
+        <div><div class="name">${esc(p.name)}</div>
+          <div class="meta">${p.last.marque ? esc(p.last.marque) + ", " : ""}${bestNote}, ${esc(shortDate.format(p.last.date))}${p.last.quantite ? ", " + esc(p.last.quantite) : ""}</div></div>
+        <div class="right">${tagHTML(p.val(p.last), "", p.basis)}${deltaHTML(p.delta)}${p.delta && Math.abs(p.delta.abs) >= 0.005 ? `<span class="delta" style="color:var(--muted);font-weight:500">avant ${esc(num2.format(p.val(p.prev)))} €</span>` : ""}</div>
+      </button></li>`;
+    }).join("")}</ul>`;
+  }
+
+  function historyHTML() {
+    const list = state.releves.filter(matches).sort((a, b) => b.date - a.date);
+    if (!list.length) return `<p class="loading">Aucun relevé ne correspond à « ${esc(state.q)} ».</p>`;
+    let out = "", lastDay = "";
+    for (const r of list) {
+      const day = dayFmt.format(r.date);
+      if (day !== lastDay) { if (lastDay) out += "</ul>"; out += `<h2 class="day">${esc(day)}</h2><ul class="list">`; lastDay = day; }
+      out += `<li><button type="button" class="row" data-edit="${esc(r.id)}">
+        <div><div class="name">${esc(r.produit)}</div>
+          <div class="meta">${r.marque ? esc(r.marque) + ", " : ""}${esc(r.magasin || "Magasin non indiqué")}${r.quantite ? ", " + esc(r.quantite) : ""}${r.prixUnite != null ? ", " + esc(num2.format(r.prixUnite)) + " €/" + esc(r.unite || "kg") : ""}</div></div>
+        <div class="right">${tagHTML(r.prix, "plain")}</div>
+      </button></li>`;
+    }
+    return out + "</ul>";
+  }
+
+  function updateDatalists() {
+    const uniq = arr => [...new Map(arr.filter(Boolean).map(v => [norm(v), v])).values()].sort((a, b) => a.localeCompare(b, "fr"));
+    $("dlProduits").innerHTML = uniq(state.releves.map(r => r.produit)).map(v => `<option value="${esc(v)}">`).join("");
+    $("dlMagasins").innerHTML = uniq(state.releves.map(r => r.magasin)).map(v => `<option value="${esc(v)}">`).join("");
+    $("dlMarques").innerHTML = uniq(state.releves.map(r => r.marque)).map(v => `<option value="${esc(v)}">`).join("");
+  }
+
+  // ---------- Fiche produit ----------
+  const COLORS = ["--s1", "--s2", "--s3", "--s4", "--s5"];
+  function openProduct(key) {
+    const p = products().find(x => x.key === key);
+    if (!p) return;
+    $("prodTitle").textContent = p.name;
+    const storeNames = [...new Map(p.items.map(r => [norm(r.magasin) || "—", r.magasin || "Magasin non indiqué"])).entries()];
+    const color = k => `var(${COLORS[storeNames.findIndex(([n]) => n === k) % COLORS.length]})`;
+
+    const unitBits = p.current.filter(r => r.prixUnite != null);
+    const hasBrand = p.current.some(r => r.marque);
+    $("prodBody").innerHTML = `
+      <div class="hero">
+        <div>${tagHTML(p.val(p.last), "big", p.basis)}<div class="who">${p.last.marque ? esc(p.last.marque) + ", " : ""}${esc(p.last.magasin || "Magasin non indiqué")}, ${esc(dayFmt.format(p.last.date))}</div></div>
+        <div>${deltaHTML(p.delta)}</div>
+      </div>
+      ${p.items.length > 1 ? (p.basis ? `<p class="hint" style="margin:12px 0 0">Formats différents : les prix sont comparés au ${p.basis === "l" ? "litre" : p.basis === "pièce" ? "pièce" : "kg"}.</p>` : "") + chartSVG(p.items, k => color(k), p.val, p.basis) + `<div class="legend">${storeNames.map(([k, n]) => `<span><i style="background:${color(k)}"></i>${esc(n)}</span>`).join("")}</div>` : `<p class="hint" style="margin:12px 0 0">Le graphique apparaîtra dès le deuxième relevé de ce produit.</p>`}
+      <h3>Dernier prix par magasin</h3>
+      <table><thead><tr><th>Magasin</th>${hasBrand ? "<th>Marque</th>" : ""}<th class="n">Prix</th>${unitBits.length ? `<th class="n">Au kg / l</th>` : ""}<th class="n">Relevé</th></tr></thead><tbody>
+      ${p.current.map((r, i) => `<tr><td>${esc(r.magasin || "—")}${i === 0 && p.current.length > 1 ? `<div class="best" style="font-size:.8rem">le moins cher</div>` : ""}</td>${hasBrand ? `<td>${esc(r.marque || "—")}</td>` : ""}
+        <td class="n">${esc(eur.format(r.prix))}</td>${unitBits.length ? `<td class="n">${r.prixUnite != null ? esc(num2.format(r.prixUnite)) + " €/" + esc(r.unite || "kg") : "—"}</td>` : ""}
+        <td class="n">${esc(shortDate.format(r.date))}</td></tr>`).join("")}
+      </tbody></table>
+      ${!p.basis && unitBits.length && p.current.some(r => r.quantite) && new Set(p.current.map(r => norm(r.quantite))).size > 1 ? `<p class="hint" style="margin-top:8px">Les formats diffèrent : compare plutôt le prix au kg / l.</p>` : ""}
+      <h3>Tous les relevés</h3>
+      <ul class="list">${[...p.items].reverse().map(r => `<li><button type="button" class="row" data-edit="${esc(r.id)}">
+        <div><div class="name" style="font-weight:500">${esc(dayFmt.format(r.date))}</div><div class="meta">${r.marque ? esc(r.marque) + ", " : ""}${esc(r.magasin || "Magasin non indiqué")}${r.quantite ? ", " + esc(r.quantite) : ""}${r.prixUnite != null && Math.abs(r.prixUnite - r.prix) >= 0.005 ? ", " + esc(num2.format(r.prixUnite)) + " €" + esc(perShort(r.unite || "kg")) : ""}</div></div>
+        <div class="right">${tagHTML(r.prix, "plain")}</div></button></li>`).join("")}</ul>`;
+    $("prodAdd").onclick = () => {
+      $("prodDlg").close();
+      const mode = inferMode(p.last);
+      openForm({ produit: p.name, marque: p.last.marque, ean: p.last.ean, mode, unite: p.last.unite,
+        quantite: mode === "paquet" ? p.last.quantite : null, qteValeur: mode === "paquet" ? p.last.qteValeur : null, qteUnite: mode === "paquet" ? p.last.qteUnite : null, noPrice: true });
+    };
+    if (!$("prodDlg").open) $("prodDlg").showModal();
+  }
+
+  function chartSVG(items, colorFor, val = r => r.prix, per = null) {
+    const W = 420, H = 200, L = per ? 90 : 62, R = 10, T = 12, B = 28;
+    const xs = items.map(r => r.date), ys = items.map(val);
+    let x0 = Math.min(...xs), x1 = Math.max(...xs); if (x1 === x0) { x0 -= 864e5; x1 += 864e5; }
+    let y0 = Math.min(...ys), y1 = Math.max(...ys);
+    const pad = Math.max((y1 - y0) * 0.15, 0.1); y0 = Math.max(0, y0 - pad); y1 += pad;
+    const X = t => L + (t - x0) / (x1 - x0) * (W - L - R);
+    const Y = v => T + (1 - (v - y0) / (y1 - y0)) * (H - T - B);
+    const ticks = [0, 0.5, 1].map(f => y0 + f * (y1 - y0));
+    const groups = new Map();
+    for (const r of items) { const k = norm(r.magasin) || "—"; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(r); }
+    let g = ticks.map(v => `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${L - 8}" y="${Y(v) + 4}" text-anchor="end" font-size="14" fill="var(--muted)">${esc(num2.format(v))} €${per ? esc(perShort(per)) : ""}</text>`).join("");
+    g += `<text x="${L}" y="${H - 6}" font-size="14" fill="var(--muted)">${esc(shortDate.format(x0))}</text><text x="${W - R}" y="${H - 6}" text-anchor="end" font-size="14" fill="var(--muted)">${esc(shortDate.format(x1))}</text>`;
+    for (const [k, rs] of groups) {
+      const c = colorFor(k);
+      if (rs.length > 1) g += `<polyline fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round" points="${rs.map(r => `${X(r.date)},${Y(val(r))}`).join(" ")}"/>`;
+      g += rs.map(r => `<circle cx="${X(r.date)}" cy="${Y(val(r))}" r="4.5" fill="${c}"><title>${esc((r.magasin || "—") + " : " + eur.format(val(r)) + perShort(per) + ", " + shortDate.format(r.date))}</title></circle>`).join("");
+    }
+    return `<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Évolution du prix">${g}</svg></div>`;
+  }
+
+  // ---------- Formulaire ----------
+  const form = $("form");
+  let editingId = null, delArmed = false, scanCtl = null;
+
+  function lastStore() {
+    const r = [...state.releves].sort((a, b) => (b.createdAt || b.date) - (a.createdAt || a.date))[0];
+    return r?.magasin || "";
+  }
+
+  // ----- Quantités, modes de prix et calculs -----
+  const QTY_UNITS = {
+    g: { base: "kg", f: 0.001, label: "g" }, kg: { base: "kg", f: 1, label: "kg" },
+    ml: { base: "l", f: 0.001, label: "ml" }, cl: { base: "l", f: 0.01, label: "cl" }, l: { base: "l", f: 1, label: "l" },
+    pc: { base: "pièce", f: 1, label: "pièce(s)" }
+  };
+  const MODE_UNITS = { paquet: ["g", "kg", "ml", "cl", "l", "pc"], kg: ["g", "kg"], l: ["ml", "cl", "l"] };
+  const round2 = n => Math.round(n * 100) / 100;
+  const fmtNum = n => new Intl.NumberFormat("fr-BE", { maximumFractionDigits: 3, useGrouping: false }).format(n);
+  const parseDec = t => { t = String(t ?? "").replace(/\s/g, "").replace(",", "."); if (!t) return null; const n = Number(t); return Number.isFinite(n) && n > 0 ? n : null; };
+  const fmtQty = (v, u) => u === "pc" ? `${fmtNum(v)} pièce${v > 1 ? "s" : ""}` : `${fmtNum(v)} ${u}`;
+  function parseQtyStr(str) {
+    const t = String(str || "").toLowerCase().replace(/×/g, "x");
+    const m = t.match(/(?:(\d+)\s*x\s*)?(\d+(?:[.,]\d+)?)\s*(kg|g|cl|ml|litres?|l|pi[eè]ces?|pc)(?![a-z])/);
+    if (!m) return null;
+    let u = m[3];
+    if (/^litre/.test(u)) u = "l";
+    if (/^pi|^pc/.test(u)) u = "pc";
+    return { v: Math.round(Number(m[2].replace(",", ".")) * (m[1] ? Number(m[1]) : 1) * 1000) / 1000, u };
+  }
+  function inferMode(r) {
+    if (!r) return "paquet";
+    if (r.mode) return r.mode;
+    const q = parseQtyStr(r.quantite);
+    if (r.prixUnite != null && r.unite !== "pièce" && (!q || /^au /i.test(r.quantite || "")) &&
+        (r.prix == null || Math.abs(r.prix - r.prixUnite) < 0.005)) return r.unite === "l" ? "l" : "kg";
+    return "paquet";
+  }
+  function setMode(mode, silent) {
+    form.dataset.mode = mode;
+    document.querySelectorAll("#modeSeg button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.mode === mode)));
+    $("prixLabel").textContent = mode === "kg" ? "Prix au kg (€)" : mode === "l" ? "Prix au litre (€)" : "Prix du paquet (€)";
+    $("qteLabel").textContent = mode === "paquet" ? "Contenu du paquet" : "Quantité achetée";
+    const sel = form.elements.qteUnite, cur = sel.value;
+    sel.innerHTML = MODE_UNITS[mode].map(u => `<option value="${u}">${QTY_UNITS[u].label}</option>`).join("");
+    sel.value = MODE_UNITS[mode].includes(cur) ? cur : (mode === "l" ? "l" : "g");
+    form.elements.qteValeur.placeholder = mode === "paquet" ? "ex. 500" : "facultatif";
+    if (!silent) { updateCalc(); renderPrev(); }
+  }
+  function computeEntry() {
+    const f = form.elements, mode = form.dataset.mode || "paquet";
+    const amount = parseNum(f.prix.value), qv = parseDec(f.qteValeur.value), qu = f.qteUnite.value, U = QTY_UNITS[qu];
+    const qBase = qv && U ? qv * U.f : null;
+    const r = { mode, prix: null, prixUnite: null, unite: null, quantite: null, qteValeur: qBase ? qv : null, qteUnite: qBase ? qu : null };
+    if (mode === "paquet") {
+      r.prix = amount;
+      if (qBase) { r.quantite = fmtQty(qv, qu); if (amount != null) { r.prixUnite = round2(amount / qBase); r.unite = U.base; } }
+      else {
+        r.quantite = form.dataset.qtext || null;
+        if (form.dataset.keepPu) { r.prixUnite = Number(form.dataset.keepPu); r.unite = form.dataset.keepUnit || "kg"; }
+      }
+    } else {
+      r.unite = mode;
+      if (amount != null) r.prixUnite = amount;
+      if (qBase) { r.quantite = fmtQty(qv, qu); if (amount != null) r.prix = round2(amount * qBase); }
+      else { r.quantite = mode === "kg" ? "au kg" : "au litre"; r.prix = amount; }
+    }
+    return r;
+  }
+  function updateCalc() {
+    const e = computeEntry(), el = $("calcLine"), mode = e.mode;
+    let html = "";
+    // Montre la conversion utilisée (100 cl = 1 l, 100 g = 0,1 kg) pour que le calcul soit vérifiable
+    const eqTxt = e.qteValeur && !(["kg", "l", "pc"].includes(e.qteUnite))
+      ? `${fmtQty(e.qteValeur, e.qteUnite)} = ${fmtQty(Math.round(e.qteValeur * QTY_UNITS[e.qteUnite].f * 1000) / 1000, QTY_UNITS[e.qteUnite].base)}` : "";
+    if (mode === "paquet" && e.qteValeur && e.prixUnite != null) html = `${eqTxt ? esc(eqTxt) + ", soit " : "Soit "}<b>${esc(num2.format(e.prixUnite))} € ${perLabel(e.unite)}</b>`;
+    else if (mode === "paquet" && e.qteValeur) html = `<span class="muted">Le prix ${perAu(QTY_UNITS[e.qteUnite].base)} sera calculé dès que tu indiques le prix.</span>`;
+    else if (mode === "paquet" && e.prixUnite != null) html = `Prix ${e.unite === "l" ? "au litre" : "au kg"} connu : <b>${esc(num2.format(e.prixUnite))} €</b>`;
+    else if (mode !== "paquet" && e.qteValeur && e.prix != null) html = `Prix à payer pour ${esc(e.quantite)}${eqTxt ? " (" + esc(eqTxt.split(" = ")[1]) + ")" : ""} : <b>${esc(eur.format(e.prix))}</b>`;
+    else if (mode !== "paquet") html = `<span class="muted">Indique la quantité achetée pour calculer le prix à payer (facultatif).</span>`;
+    // Quantité invraisemblable (1 cl, 50 l, 2 g…) : propose l'unité probable en un geste
+    const qv = parseDec(form.elements.qteValeur.value), qu = form.elements.qteUnite.value;
+    let fix = null;
+    if (qv) {
+      if ((qu === "cl" && qv < 3) || (qu === "ml" && qv < 5)) fix = "l";
+      else if (qu === "l" && qv > 10) fix = qv > 100 ? "ml" : "cl";
+      else if (qu === "g" && qv < 5) fix = "kg";
+      else if (qu === "kg" && qv >= 50) fix = "g";
+    }
+    if (fix && MODE_UNITS[mode].includes(fix)) {
+      html += `<div class="unitfix">${esc(fmtQty(qv, qu))}, c’est inhabituel. <button type="button" class="link" data-fixunit="${fix}">Voulais-tu dire ${esc(fmtQty(qv, fix))} ?</button></div>`;
+    }
+    el.innerHTML = html; el.hidden = !html;
+  }
+  // Compare la saisie aux anciens prix du produit (même magasin en priorité, sinon le plus récent)
+  function historyFor(name) {
+    const k = norm(name);
+    return k ? state.releves.filter(r => norm(r.produit) === k && r.id !== editingId).sort((a, b) => b.date - a.date) : [];
+  }
+  function basisFor(items, e) {
+    const u = e.mode !== "paquet" ? e.mode : e.prixUnite != null ? e.unite : null;
+    if (u && items.some(r => r.prixUnite != null && (r.unite || "kg") === u) &&
+        (e.mode !== "paquet" || items.some(r => norm(r.quantite) !== norm(e.quantite)))) return u;
+    return null;
+  }
+  function compareToHistory(e) {
+    const f = form.elements, items = historyFor(f.produit.value);
+    if (!items.length) return null;
+    const per = basisFor(items, e);
+    const val = r => per ? (r.prixUnite != null && (r.unite || "kg") === per ? r.prixUnite : null) : r.prix;
+    const hist = items.filter(r => val(r) != null);
+    const store = norm(f.magasin.value);
+    const ref = hist.find(r => norm(r.magasin) === store) || hist[0];
+    const newV = per ? e.prixUnite : e.prix;
+    if (!ref || newV == null) return { per, val, hist, ref };
+    const oldV = val(ref), d = newV - oldV;
+    return { per, val, hist, ref, newV, oldV, d, pct: oldV > 0 ? d / oldV : 0 };
+  }
+  function renderPrev() {
+    const panel = $("prevPanel"), c = compareToHistory(computeEntry());
+    if (!c || !c.hist.length) { panel.hidden = true; panel.innerHTML = ""; return; }
+    const sx = perShort(c.per), where = r => `${r.magasin || "magasin non indiqué"}, ${dateY.format(r.date)}`;
+    let cmp = "";
+    if (c.d != null) {
+      cmp = Math.abs(c.d) < 0.005
+        ? `<div class="cmp same">= Même prix qu’au dernier relevé (${esc(where(c.ref))})</div>`
+        : `<div class="cmp ${c.d > 0 ? "up" : "down"}">${c.d > 0 ? "▲ Hausse" : "▼ Baisse"} de ${esc(num2.format(Math.abs(c.d)))} €${esc(sx)} (${c.d > 0 ? "+" : "−"}${Math.round(Math.abs(c.pct) * 100)} %)<br><span style="font-weight:500">Ancien prix : ${esc(num2.format(c.oldV))} €${esc(sx)} (${esc(where(c.ref))})</span></div>`;
+    }
+    const min = c.hist.reduce((m, r) => !m || c.val(r) < c.val(m) ? r : m, null);
+    panel.innerHTML = `<div class="prev-head">Anciens prix de ce produit${c.per ? ` (${perAu(c.per)})` : ""}</div>${cmp}
+      <ul class="prev-list">${c.hist.slice(0, 8).map(r => `<li class="${r === c.ref ? "ref" : ""}"><span>${esc(dateY.format(r.date))}</span><span>${esc(r.magasin || "—")}${!c.per && r.quantite ? ", " + esc(r.quantite) : ""}</span><span class="n">${esc(num2.format(c.val(r)))} €${esc(sx)}</span></li>`).join("")}</ul>
+      ${c.hist.length > 8 ? `<div class="prev-more">Et ${c.hist.length - 8} relevé${c.hist.length - 8 > 1 ? "s" : ""} plus ancien${c.hist.length - 8 > 1 ? "s" : ""}, visibles dans la fiche du produit.</div>` : ""}
+      ${c.hist.length > 1 ? `<div class="prev-min">Plus bas relevé : ${esc(num2.format(c.val(min)))} €${esc(sx)} chez ${esc(min.magasin || "—")} (${esc(dateY.format(min.date))})</div>` : ""}`;
+    panel.hidden = false;
+  }
+  // Changement de type de prix : convertit la valeur saisie au lieu de la réinterpréter
+  // (2,50 € le paquet de 100 g devient 25,00 € au kg, et inversement)
+  function convertOnSwitch(from, to) {
+    const f = form.elements, qv = parseDec(f.qteValeur.value), qu = f.qteUnite.value, U = QTY_UNITS[qu];
+    const shown = f.prix.value.trim();
+    const amount = shown && shown === form.dataset.exactShown ? Number(form.dataset.exact) : parseNum(shown);
+    const qBase = qv && U ? qv * U.f : null;
+    let exact = null, note = null;
+    if (from === "paquet") {
+      if (amount != null && qBase && U.base === to) exact = amount / qBase;
+      else if (form.dataset.keepPu && (form.dataset.keepUnit || "kg") === to) exact = Number(form.dataset.keepPu);
+      else if (amount != null) note = `Le prix du paquet ne peut pas être converti sans son contenu en ${to === "kg" ? "g ou kg" : "ml, cl ou l"} : indique le prix ${perAu(to)}.`;
+    } else if (to === "paquet") {
+      if (amount != null && qBase && U.base === from) exact = amount * qBase;
+      else if (amount != null) { form.dataset.keepPu = round2(amount); form.dataset.keepUnit = from; note = "Indique le prix du paquet et son contenu."; }
+    } else if (amount != null) {
+      exact = amount;
+      note = `Un prix ${perAu(from)} ne se convertit pas ${perAu(to)} : vérifie la valeur.`;
+    }
+    if (exact != null) {
+      f.prix.value = num2.format(round2(exact));
+      form.dataset.exact = String(exact); form.dataset.exactShown = f.prix.value;
+    } else { f.prix.value = ""; form.dataset.exact = ""; form.dataset.exactShown = ""; }
+    f.prix.classList.remove("read");
+    if (qv && !MODE_UNITS[to].includes(qu)) f.qteValeur.value = "";
+    return note;
+  }
+  $("modeSeg").addEventListener("click", e => {
+    const b = e.target.closest("[data-mode]");
+    if (!b || b.dataset.mode === form.dataset.mode) return;
+    form.dataset.modeTouched = "1";
+    const note = convertOnSwitch(form.dataset.mode, b.dataset.mode);
+    setMode(b.dataset.mode);
+    if (note) toast(note);
+  });
+  form.addEventListener("input", e => {
+    if (e.target.name === "date" || e.target.name === "ean") return;
+    // Produit connu : reprend son type de prix habituel (au kg, au litre ou paquet) tant que rien n'est saisi
+    if (e.target.name === "produit" && !editingId && !form.dataset.modeTouched && !form.elements.prix.value.trim()) {
+      const h = historyFor(e.target.value);
+      if (h.length) {
+        const m = inferMode(h[0]);
+        if (m !== form.dataset.mode) setMode(m, true);
+        if (m === "paquet" && !form.elements.qteValeur.value.trim()) {
+          const q = h[0].qteValeur ? { v: h[0].qteValeur, u: h[0].qteUnite } : parseQtyStr(h[0].quantite);
+          if (q && MODE_UNITS.paquet.includes(q.u)) { form.elements.qteValeur.value = fmtNum(q.v); form.elements.qteUnite.value = q.u; }
+        }
+      }
+    }
+    updateCalc(); renderPrev();
+  });
+  form.addEventListener("change", e => { if (e.target.name === "qteUnite") { updateCalc(); renderPrev(); } });
+  $("calcLine").addEventListener("click", e => {
+    const b = e.target.closest("[data-fixunit]");
+    if (!b) return;
+    form.elements.qteUnite.value = b.dataset.fixunit;
+    updateCalc(); renderPrev();
+  });
+
+  function openForm(prefill = {}, id = null) {
+    editingId = id; delArmed = false;
+    form.reset();
+    form.querySelectorAll("input").forEach(i => i.classList.remove("read"));
+    $("formTitle").textContent = id ? "Modifier le relevé" : "Nouveau prix";
+    $("delBtn").hidden = !id; $("delBtn").textContent = "Supprimer ce relevé";
+    $("scanbox").hidden = true; $("readHint").hidden = true;
+    const f = form.elements;
+    f.produit.value = prefill.produit || "";
+    f.magasin.value = prefill.magasin ?? (id ? "" : lastStore());
+    f.ean.value = prefill.ean || "";
+    form.querySelectorAll(".qte input").forEach(i => i.classList.remove("read"));
+    const mode = inferMode(prefill);
+    form.dataset.keepPu = ""; form.dataset.keepUnit = ""; form.dataset.qtext = ""; form.dataset.exact = ""; form.dataset.exactShown = ""; form.dataset.modeTouched = prefill.mode || id ? "1" : "";
+    setMode(mode, true);
+    const amount = prefill.noPrice ? null : mode === "paquet" ? prefill.prix : (prefill.prixUnite ?? prefill.prix);
+    f.prix.value = amount != null ? num2.format(amount) : "";
+    const q = prefill.qteValeur ? { v: prefill.qteValeur, u: prefill.qteUnite } : parseQtyStr(prefill.quantite);
+    const auKg = /^au (kg|litre)$/i.test(prefill.quantite || "");
+    if (q && MODE_UNITS[mode].includes(q.u)) { f.qteValeur.value = fmtNum(q.v); f.qteUnite.value = q.u; }
+    else { f.qteValeur.value = ""; if (prefill.quantite && !auKg) form.dataset.qtext = prefill.quantite; }
+    if (mode === "paquet" && !f.qteValeur.value && prefill.prixUnite != null && !prefill.noPrice) {
+      form.dataset.keepPu = prefill.prixUnite; form.dataset.keepUnit = prefill.unite || "kg";
+    }
+    updateCalc(); renderPrev();
+    f.marque.value = prefill.marque || "";
+    f.date.value = prefill.date ? tsToIso(prefill.date) : todayISO();
+    form.dataset.createdAt = prefill.createdAt || "";
+    $("saveBtn").disabled = false;
+    if (!$("formDlg").open) $("formDlg").showModal();
+    if (!id && !prefill.produit) setTimeout(() => { if (document.activeElement?.tagName !== "INPUT") f.produit.focus(); }, 50);
+  }
+
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const f = form.elements;
+    const produit = f.produit.value.trim();
+    const e2 = computeEntry();
+    if (!produit) { toast("Indique le nom du produit."); f.produit.focus(); return; }
+    if (e2.prix == null) { toast(form.dataset.mode === "paquet" ? "Indique le prix, par exemple 2,49." : `Indique le prix ${form.dataset.mode === "l" ? "au litre" : "au kg"}, par exemple 8,60.`); f.prix.focus(); return; }
+    const cmpInfo = compareToHistory(e2);
+    // Réutilise l'orthographe existante d'un produit déjà connu
+    const known = state.releves.find(r => norm(r.produit) === norm(produit));
+    const rec = {
+      produit: known ? known.produit : produit,
+      magasin: f.magasin.value.trim(),
+      prix: e2.prix,
+      prixUnite: e2.prixUnite,
+      unite: e2.unite,
+      mode: e2.mode,
+      qteValeur: e2.qteValeur,
+      qteUnite: e2.qteUnite,
+      marque: f.marque.value.trim() || null,
+      quantite: e2.quantite,
+      ean: f.ean.value.replace(/\D/g, "") || null,
+      date: isoToTs(f.date.value || todayISO()),
+      createdAt: Number(form.dataset.createdAt) || Date.now()
+    };
+    if (editingId) rec.id = editingId;
+    $("saveBtn").disabled = true;
+    try {
+      await Store.save(rec);
+      $("formDlg").close();
+      const c = cmpInfo;
+      toast(editingId ? "Relevé modifié."
+        : c && Math.abs(c.d) >= 0.005 ? `${rec.produit} : ${c.d > 0 ? "hausse" : "baisse"} de ${num2.format(c.oldV)} € à ${num2.format(c.newV)} €${perShort(c.per)} (${c.d > 0 ? "+" : "−"}${Math.round(Math.abs(c.pct) * 100)} %).`
+        : `${rec.produit} : ${eur.format(rec.prix)} enregistré.`);
+      if ($("prodDlg").open) openProduct(norm(rec.produit));
+    } catch (err) {
+      $("saveBtn").disabled = false;
+      toast(err?.code === "quota_exceeded" ? "Le carnet est plein. Supprime d’anciens relevés pour continuer."
+        : err?.code === "invalid_argument" ? "Tu n’as pas le droit de modifier ce carnet."
+        : "L’enregistrement a échoué. Vérifie ta connexion et réessaie.");
+    }
+  });
+
+  $("delBtn").addEventListener("click", async () => {
+    if (!delArmed) { delArmed = true; $("delBtn").textContent = "Confirmer la suppression"; return; }
+    try {
+      const r = state.releves.find(x => x.id === editingId);
+      await Store.remove(editingId);
+      $("formDlg").close();
+      toast("Relevé supprimé.");
+      if ($("prodDlg").open && r) {
+        if (state.releves.some(x => norm(x.produit) === norm(r.produit))) openProduct(norm(r.produit)); else $("prodDlg").close();
+      }
+    } catch { toast("La suppression a échoué. Réessaie."); }
+  });
+
+  // ---------- Scan d'étiquette ----------
+  // Dans Claude : la photo est lue par Claude (le plus fiable).
+  // Ailleurs (GitHub Pages, Safari) : lecture sur l'appareil (OCR Tesseract + code-barres ZXing),
+  // puis recherche du produit sur Open Food Facts à partir du code-barres.
+  const IN_CLAUDE = !!(window.claude && typeof window.claude.use === "function");
+  let sample = null, engine = IN_CLAUDE ? null : "local";
+  async function initSample() {
+    if (!IN_CLAUDE) return setScan(true);
+    try {
+      sample = await claude.use("sample");
+      const lim = sample ? await sample.limits() : null;
+      if (lim?.images) { $("photo").accept = lim.images.mediaTypes.join(","); engine = "claude"; }
+      setScan(!!lim?.images);
+    } catch { setScan(false); }
+  }
+  function setScan(ok) {
+    $("scanBtn").disabled = !ok;
+    $("scanBtn").title = ok ? "" : "La lecture automatique n’est pas disponible ici. Utilise « Saisir ».";
+  }
+
+  $("scanBtn").addEventListener("click", () => { if (engine) $("photo").click(); });
+  $("photo").addEventListener("change", async () => {
+    const file = $("photo").files?.[0];
+    $("photo").value = "";
+    if (!file) return;
+    openForm();
+    const url = URL.createObjectURL(file);
+    $("scanImg").src = url;
+    $("scanbox").hidden = false;
+    const status = (main, sub) => {
+      $("scanStatus").innerHTML = `<span class="spinner" aria-hidden="true"></span>${esc(main)}`;
+      if (sub != null) $("scanSub").textContent = sub;
+    };
+    status("Lecture de l’étiquette…", "Quelques secondes. Tu peux déjà indiquer le magasin.");
+    scanCtl?.abort(); scanCtl = new AbortController();
+    const signal = scanCtl.signal;
+    try {
+      let data;
+      if (engine === "claude") {
+        const blob = await downscale(file, url);
+        data = await sample.json(buildPrompt(), { images: [blob], signal, modelTier: "default" });
+      } else {
+        data = await localScan(url, status);
+      }
+      if (signal.aborted) return;
+      applyScan(data || {});
+    } catch (e) {
+      if (signal.aborted) return;
+      const msg = {
+        not_granted: "Lecture automatique refusée. Saisis les valeurs à la main.",
+        rate_limited: "Trop de lectures d’affilée. Patiente un instant puis réessaie.",
+        image_rejected: "Ce format de photo n’est pas accepté. Réessaie avec l’appareil photo.",
+        aborted: "Lecture annulée.",
+        offline: "Le module de lecture n’a pas pu être téléchargé. Vérifie ta connexion : il faut Internet pour le premier scan."
+      }[e?.code] || "L’étiquette n’a pas pu être lue. Saisis les valeurs à la main ou reprends une photo plus nette.";
+      if (e?.code === "not_granted") { engine = null; setScan(false); }
+      $("scanStatus").textContent = "Lecture impossible";
+      $("scanSub").textContent = msg;
+    }
+  });
+
+  // ----- Lecture sur l'appareil -----
+  const TESS_URL = "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js";
+  const ZXING_URL = "https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js";
+  const scripts = {};
+  function loadScript(src) {
+    return scripts[src] ||= new Promise((res, rej) => {
+      const s = document.createElement("script");
+      s.src = src; s.crossOrigin = "anonymous";
+      s.onload = res;
+      s.onerror = () => { delete scripts[src]; s.remove(); rej({ code: "offline" }); };
+      document.head.appendChild(s);
+    });
+  }
+  function loadImage(src) {
+    return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej({ code: "image_rejected" }); i.src = src; });
+  }
+  function toCanvas(img, max, gray) {
+    const s = Math.min(1, max / Math.max(img.naturalWidth || img.width, img.naturalHeight || img.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round((img.naturalWidth || img.width) * s); c.height = Math.round((img.naturalHeight || img.height) * s);
+    const ctx = c.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(img, 0, 0, c.width, c.height);
+    if (gray) {
+      const d = ctx.getImageData(0, 0, c.width, c.height), p = d.data;
+      for (let i = 0; i < p.length; i += 4) { const v = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2]; p[i] = p[i + 1] = p[i + 2] = v; }
+      ctx.putImageData(d, 0, 0);
+    }
+    return c;
+  }
+
+  let tessWorker = null, tessProgress = null;
+  async function getWorker(status) {
+    if (tessWorker) return tessWorker;
+    status("Préparation de la lecture…", "Premier scan : téléchargement du module de lecture (environ 5 Mo), une seule fois.");
+    await loadScript(TESS_URL);
+    try {
+      tessWorker = await Tesseract.createWorker("fra", 1, {
+        logger: m => { if (m.status === "recognizing text" && tessProgress) tessProgress(m.progress); }
+      });
+    } catch { tessWorker = null; throw { code: "offline" }; }
+    return tessWorker;
+  }
+  async function ocrPass(canvas, params = {}) {
+    await tessWorker.setParameters({ tessedit_pageseg_mode: "11", preserve_interword_spaces: "1", tessedit_char_whitelist: "", ...params });
+    const { data } = await tessWorker.recognize(canvas);
+    return data;
+  }
+
+  function grayOf(c) {
+    const p = c.getContext("2d", { willReadFrequently: true }).getImageData(0, 0, c.width, c.height).data;
+    const g = new Uint8Array(c.width * c.height);
+    for (let i = 0; i < g.length; i++) g[i] = (p[4 * i] * 299 + p[4 * i + 1] * 587 + p[4 * i + 2] * 114) / 1000;
+    return g;
+  }
+  // Redresse la photo : cherche l'angle (−12° à +12°) qui aligne le mieux les bords horizontaux des lettres
+  function estimateSkew(canvas) {
+    const s = toCanvas(canvas, 600, false), W = s.width, H = s.height, g = grayOf(s);
+    const pts = [];
+    for (let y = 1; y < H - 1; y++) for (let x = 0; x < W; x++) {
+      const v = g[(y + 1) * W + x] - g[(y - 1) * W + x];
+      if (v > 60 || v < -60) pts.push(x, y);
+    }
+    if (pts.length < 200) return 0;
+    const diag = Math.ceil(Math.hypot(W, H)), bins = new Float64Array(2 * diag + 2);
+    let best = -1, bestA = 0;
+    for (let a = -12; a <= 12.001; a += 0.5) {
+      const r = a * Math.PI / 180, sn = Math.sin(r), cs = Math.cos(r);
+      bins.fill(0);
+      for (let i = 0; i < pts.length; i += 2) bins[Math.round(pts[i + 1] * cs - pts[i] * sn) + diag]++;
+      let sc = 0; for (let i = 0; i < bins.length; i++) sc += bins[i] * bins[i];
+      if (sc > best) { best = sc; bestA = a; }
+    }
+    return bestA;
+  }
+  function rotate(canvas, deg) {
+    if (!deg) return canvas;
+    const c = document.createElement("canvas"); c.width = canvas.width; c.height = canvas.height;
+    const x = c.getContext("2d");
+    x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height);
+    x.translate(c.width / 2, c.height / 2); x.rotate(-deg * Math.PI / 180);
+    x.drawImage(canvas, -canvas.width / 2, -canvas.height / 2);
+    return c;
+  }
+
+  // Prix à centimes en exposant (« 1 ⁷⁹ ») : relit en gros plan la zone à gauche des centimes
+  async function readSuperscript(canvas, words) {
+    const hs = words.map(w => w.bbox.y1 - w.bbox.y0).sort((a, b) => a - b);
+    const med = hs[Math.floor(hs.length / 2)] || 20;
+    const cents = words.filter(w => /^[,.]?\d{2}€?$/.test(w.text.trim()) && (w.bbox.y1 - w.bbox.y0) >= med * 1.3)
+      .sort((a, b) => (b.bbox.y1 - b.bbox.y0) - (a.bbox.y1 - a.bbox.y0)).slice(0, 2);
+    const out = [];
+    // Cas « 179 » : le gros chiffre et les centimes en exposant lus comme un seul nombre
+    for (const w of words) {
+      const t = w.text.trim().replace(/€$/, "");
+      if (/^\d{3,4}$/.test(t) && (w.bbox.y1 - w.bbox.y0) >= med * 1.6)
+        out.push({ a: Number(t.slice(0, -2)) + Number(t.slice(-2)) / 100, h: w.bbox.y1 - w.bbox.y0, euro: true, sup: true });
+    }
+    for (const c of cents) {
+      const h = c.bbox.y1 - c.bbox.y0;
+      const x0 = Math.max(0, c.bbox.x0 - h * 4.5), x1 = c.bbox.x0 + h * 0.15;
+      const y0 = Math.max(0, c.bbox.y0 - h * 0.4), y1 = Math.min(canvas.height, c.bbox.y0 + h * 3.4);
+      if (x1 - x0 < 10 || y1 - y0 < 10) continue;
+      const scale = 110 / (y1 - y0), pad = 24;
+      const cr = document.createElement("canvas");
+      cr.width = Math.round((x1 - x0) * scale) + pad * 2; cr.height = Math.round((y1 - y0) * scale) + pad * 2;
+      const cx = cr.getContext("2d"); cx.fillStyle = "#fff"; cx.fillRect(0, 0, cr.width, cr.height);
+      cx.drawImage(canvas, x0, y0, x1 - x0, y1 - y0, pad, pad, cr.width - pad * 2, cr.height - pad * 2);
+      const d = await ocrPass(cr, { tessedit_pageseg_mode: "7", tessedit_char_whitelist: "0123456789" });
+      const digits = (d.text || "").replace(/\D/g, "");
+      if (digits.length >= 1 && digits.length <= 3)
+        out.push({ a: Number(digits) + Number(c.text.replace(/\D/g, "")) / 100, h: y1 - y0, euro: true, sup: true });
+    }
+    return out;
+  }
+
+  async function readBarcode(img) {
+    const small = toCanvas(img, 1600, false);
+    if ("BarcodeDetector" in window) {
+      try {
+        const det = new BarcodeDetector({ formats: ["ean_13", "ean_8", "upc_a", "upc_e"] });
+        const r = await det.detect(small);
+        if (r[0]?.rawValue) return r[0].rawValue;
+      } catch {}
+    }
+    try { await loadScript(ZXING_URL); } catch { return null; }
+    const hints = new Map();
+    hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.UPC_A, ZXing.BarcodeFormat.UPC_E]);
+    hints.set(ZXing.DecodeHintType.TRY_HARDER, true);
+    const reader = new ZXing.MultiFormatReader(); reader.setHints(hints);
+    for (const c of [small, toCanvas(img, 2400, false)]) {
+      try {
+        const src = new ZXing.HTMLCanvasElementLuminanceSource(c);
+        return reader.decode(new ZXing.BinaryBitmap(new ZXing.HybridBinarizer(src))).getText();
+      } catch {}
+    }
+    return null;
+  }
+
+  async function offLookup(ean) {
+    const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 7000);
+    try {
+      const r = await fetch(`https://world.openfoodfacts.org/api/v2/product/${ean}.json?fields=product_name_fr,product_name,brands,quantity`, { signal: ctl.signal });
+      const j = await r.json();
+      if (j.status !== 1 || !j.product) return null;
+      const p = j.product;
+      return {
+        produit: [p.product_name_fr, p.product_name].find(x => x && x.trim()) || null,
+        marque: p.brands ? p.brands.split(",")[0].trim() : null,
+        quantite: p.quantity || null
+      };
+    } catch { return null; } finally { clearTimeout(t); }
+  }
+
+  async function localScan(url, status) {
+    const img = await loadImage(url);
+    await getWorker(status);
+    status("Redressement de la photo…", "Lecture faite sur ton téléphone, quelques secondes.");
+    const base = toCanvas(img, 1800, true);
+    const canvas = rotate(base, estimateSkew(base));
+    const barcodeP = readBarcode(img).catch(() => null);
+    tessProgress = p => status(`Lecture du texte… ${Math.round(p * 100)} %`);
+    const data = await ocrPass(canvas);
+    tessProgress = null;
+    status("Lecture du prix…");
+    const sup = await readSuperscript(canvas, data.words || []).catch(() => []);
+    const d = parseLabel(data, await barcodeP, sup);
+    if (d.ean && !state.releves.some(r => r.ean === d.ean)) {
+      status("Recherche du produit…", "Code-barres lu : recherche dans Open Food Facts.");
+      const off = await offLookup(d.ean);
+      if (off) {
+        if (off.produit) d.produit = off.produit;
+        if (off.marque) d.marque = off.marque;
+        if (off.quantite && !d.quantite) d.quantite = off.quantite;
+        d.remarque = (d.remarque ? d.remarque + " " : "") + "Nom et marque trouvés dans Open Food Facts grâce au code-barres.";
+      }
+    }
+    return d;
+  }
+
+  // ----- Analyse du texte lu (prix, prix au kg, quantité, nom) -----
+  const AMOUNT_RE = /(^|[^\d.,])(\d{1,4}) ?(?:[.,]|€) ?(\d{2})(?!\d|[.,]\d|\s*(?:(?:kg|g|cl|ml|l)\b|%))/gi;
+  const SPLIT_RE = /^\D{0,3}(\d{1,3}) (\d{2})\D{0,3}$/;
+  const QTY_RE = /(?:(\d{1,2}) ?[x×] ?)?(\d+(?:[.,]\d+)?) ?(kg|g|cl|ml|l)\b/i;
+  function fixOcr(t) {
+    // Confusions courantes : O→0, l/I→1 entre chiffres ; « EUR » et « € » collés
+    return String(t || "")
+      .replace(/(\d)[oO]/g, (m, a) => a + "0").replace(/[oO](\d)/g, (m, a) => "0" + a)
+      .replace(/(\d)[lI|](\d)/g, (m, a, b) => a + "1" + b)
+      .replace(/\s+/g, " ").trim();
+  }
+  function amountsIn(text) {
+    const out = []; let m;
+    AMOUNT_RE.lastIndex = 0;
+    while ((m = AMOUNT_RE.exec(text))) out.push(Number(m[2]) + Number(m[3]) / 100);
+    if (!out.length) { const s = text.match(SPLIT_RE); if (s) out.push(Number(s[1]) + Number(s[2]) / 100); }
+    return out;
+  }
+  function unitOf(text) {
+    const t = text.toLowerCase();
+    if (/\/ ?kg|au kg|le kg|per kg|prix au kilo|kiloprijs/.test(t)) return "kg";
+    if (/\/ ?l\b|\/ ?lt|au litre|le litre|per l\b|per liter|literprijs/.test(t)) return "l";
+    if (/\/ ?pc|\/ ?pi[eè]ce|la pi[eè]ce|per stuk|\/ ?st\b/.test(t)) return "pièce";
+    if (/eenheidsprijs|prix unitaire|prijs per/.test(t)) return "kg";
+    return null;
+  }
+  function eanOk(code) {
+    if (!/^\d+$/.test(code) || ![8, 12, 13].includes(code.length)) return false;
+    const d = code.split("").map(Number), last = d.pop();
+    const sum = d.reverse().reduce((s, v, i) => s + v * (i % 2 === 0 ? 3 : 1), 0);
+    return (10 - sum % 10) % 10 === last;
+  }
+  function parseLabel(data, ean, sup = []) {
+    const lines = (data.lines || []).map(l => ({ text: fixOcr(l.text), h: l.bbox.y1 - l.bbox.y0, conf: l.confidence }))
+      .filter(l => l.text && l.conf > 30);
+    const words = (data.words || []).map(w => ({ text: fixOcr(w.text), h: w.bbox.y1 - w.bbox.y0, conf: w.confidence, line: w.line }))
+      .filter(w => w.text && w.conf > 30);
+    const main = [], unit = [];
+    for (const l of lines) {
+      const u = unitOf(l.text);
+      for (const a of amountsIn(l.text)) {
+        // Hauteur réelle du nombre : celle du mot qui le contient, sinon celle de la ligne
+        const w = words.find(w => amountsIn(w.text).includes(a) && w.line?.text && fixOcr(w.line.text) === l.text);
+        const h = w ? w.h : l.h;
+        (u ? unit : main).push({ a, h, u, euro: /€|eur/i.test(l.text) });
+      }
+    }
+    for (const c of sup) main.push(c);
+    main.sort((x, y) => (y.h - x.h) || (y.euro - x.euro));
+    const d = {
+      produit: null, marque: null, prix: main[0]?.a ?? unit[0]?.a ?? null, fromUnit: !main.length && unit.length > 0,
+      prixUnite: unit[0]?.a ?? null, unite: unit[0]?.u ?? null,
+      quantite: null, ean: null, confiance: "basse", remarque: null
+    };
+    for (const l of lines) { if (unitOf(l.text)) continue; const q = l.text.match(QTY_RE); if (q) { d.quantite = q[0].replace("×", "x"); break; } }
+    if (ean && eanOk(ean)) d.ean = ean;
+    else for (const l of lines) { const dg = l.text.replace(/\D/g, ""); if ((dg.length === 13 || dg.length === 8) && eanOk(dg)) { d.ean = dg; break; } }
+    const noise = /^(prix|prijs|promo|actie|action|eur|tva|btw|code|kg|per|au)\b/i;
+    const named = lines.filter(l => {
+      const letters = (l.text.match(/\p{L}/gu) || []).length;
+      return letters >= 4 && letters / l.text.length > 0.6 && !amountsIn(l.text).length && !noise.test(l.text) && !unitOf(l.text);
+    }).sort((x, y) => (y.h - x.h) || (y.text.length - x.text.length));
+    if (named[0]) d.produit = named[0].text;
+    if (d.prix != null) d.confiance = main.length > 1 && Math.abs(main[0].h - main[1].h) < 4 ? "basse" : "moyenne";
+    if (d.prix == null) d.remarque = "Aucun prix reconnu. Rapproche-toi de l’étiquette, bien à plat et sans reflet.";
+    else if (d.fromUnit) d.remarque = "Seul un prix au kg / l a été trouvé : il est repris comme prix. Corrige-le si l’article est vendu à la pièce.";
+    else d.remarque = "Lecture faite sur ton téléphone : vérifie surtout le prix.";
+    delete d.fromUnit;
+    return d;
+  }
+
+  function buildPrompt() {
+    return `Cette photo montre une étiquette de prix de rayon de supermarché (Belgique, texte en français et/ou en néerlandais) ou un emballage de produit.
+Lis-la et réponds UNIQUEMENT avec un objet JSON, sans texte autour, avec exactement ces clés :
+{
+  "produit": nom court et lisible du produit, SANS la marque (ex. "Lait demi-écrémé"), ou null,
+  "marque": marque du produit si elle est visible (ex. "Inza"), ou null,
+  "prix": prix de vente actuel payé par le client, en euros (nombre, ex. 2.49). En cas de promotion, le prix promo. Ou null,
+  "ancienPrix": ancien prix barré s'il y en a un (nombre) ou null,
+  "prixUnite": prix au kilo, au litre ou à la pièce imprimé sur l'étiquette (nombre) ou null,
+  "unite": "kg", "l" ou "pièce" selon ce prix unitaire, ou null,
+  "quantite": contenu de l'emballage tel qu'indiqué (ex. "500 g", "6 x 33 cl"), ou null,
+  "ean": chiffres du code-barres s'ils sont lisibles en entier, ou null,
+  "confiance": "haute", "moyenne" ou "basse",
+  "remarque": une phrase courte en français si une valeur est douteuse, sinon null
+}
+N'invente rien : mets null pour tout ce qui n'est pas lisible sur la photo. Ne confonds pas le prix au kilo avec le prix de vente : le prix de vente est en général le plus grand chiffre.`;
+  }
+
+  function applyScan(d) {
+    const f = form.elements;
+    const set = (el, v) => { if (v != null && v !== "" && !el.value.trim()) { el.value = v; el.classList.add("read"); } };
+    // Si le code-barres est déjà connu, réutilise le nom du produit du carnet
+    const ean = d.ean ? String(d.ean).replace(/\D/g, "") : "";
+    const known = ean && state.releves.find(r => r.ean === ean);
+    set(f.produit, known ? known.produit : d.produit);
+    set(f.marque, (known && known.marque) || d.marque);
+    const sp = typeof d.prix === "number" ? round2(d.prix) : parseNum(d.prix);
+    const su = typeof d.prixUnite === "number" ? round2(d.prixUnite) : parseNum(d.prixUnite);
+    const q = parseQtyStr(d.quantite);
+    if (!f.prix.value.trim() && (sp != null || su != null)) {
+      const vrac = su != null && d.unite !== "pièce" && (sp == null || Math.abs(sp - su) < 0.005) && !q;
+      setMode(vrac ? (d.unite === "l" ? "l" : "kg") : "paquet", true);
+      set(f.prix, num2.format(vrac ? su : (sp ?? su)));
+    }
+    if (q && MODE_UNITS[form.dataset.mode].includes(q.u) && !f.qteValeur.value.trim()) {
+      f.qteValeur.value = fmtNum(q.v); f.qteUnite.value = q.u; f.qteValeur.classList.add("read");
+    } else if (d.quantite && !q && !form.dataset.qtext) form.dataset.qtext = d.quantite;
+    if (form.dataset.mode === "paquet" && su != null && !f.qteValeur.value.trim()) { form.dataset.keepPu = su; form.dataset.keepUnit = d.unite === "l" ? "l" : "kg"; }
+    set(f.ean, ean);
+    updateCalc(); renderPrev();
+    const found = form.querySelectorAll("input.read").length;
+    $("readHint").hidden = !found;
+    $("scanStatus").textContent = found
+      ? (d.confiance === "basse" ? "Lecture incertaine : vérifie bien" : "Étiquette lue")
+      : "Rien de lisible sur cette photo";
+    const bits = [];
+    if (known) bits.push("Produit reconnu dans ton carnet.");
+    if (d.ancienPrix != null) bits.push(`Promo : ancien prix ${eur.format(parseNum(d.ancienPrix))}.`);
+    if (d.remarque) bits.push(String(d.remarque));
+    if (!found) bits.push("Rapproche-toi de l’étiquette et évite les reflets.");
+    $("scanSub").textContent = bits.join(" ");
+    if (!f.magasin.value.trim()) f.magasin.focus();
+  }
+
+  function downscale(file, url) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const max = 1600, s = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+        const c = document.createElement("canvas");
+        c.width = Math.round(img.naturalWidth * s); c.height = Math.round(img.naturalHeight * s);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        c.toBlob(b => resolve(b || file), "image/jpeg", 0.85);
+      };
+      img.onerror = () => resolve(file);
+      img.src = url;
+    });
+  }
+
+  // ---------- Import / export CSV ----------
+  const csvNum = new Intl.NumberFormat("fr-BE", { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: false });
+  const COLS = ["Date", "Produit", "Marque", "Magasin", "Prix", "Quantité", "Prix unitaire", "Unité", "Code-barres"];
+  let downloads = null, pending = null;
+
+  function openData() {
+    const n = state.releves.length;
+    $("exportInfo").textContent = n
+      ? `Télécharge tes ${n} relevé${n > 1 ? "s" : ""} dans un fichier CSV lisible par Excel, Numbers ou Google Sheets.`
+      : "Rien à exporter pour l’instant : ton carnet est vide.";
+    $("exportBtn").disabled = !n;
+    resetImport();
+    if (!$("dataDlg").open) $("dataDlg").showModal();
+  }
+
+  function csvCell(v) {
+    const t = v == null ? "" : String(v);
+    return /[;"\n\r]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+  }
+  function buildCSV() {
+    const rows = [...state.releves].sort((a, b) => a.date - b.date || (a.createdAt || 0) - (b.createdAt || 0)).map(r => [
+      tsToIso(r.date), r.produit, r.marque || "", r.magasin || "", csvNum.format(r.prix), r.quantite || "",
+      r.prixUnite != null ? csvNum.format(r.prixUnite) : "", r.prixUnite != null ? (r.unite || "kg") : "", r.ean || ""
+    ]);
+    return "\uFEFF" + [COLS, ...rows].map(r => r.map(csvCell).join(";")).join("\r\n") + "\r\n";
+  }
+
+  $("exportBtn").addEventListener("click", async () => {
+    const filename = `carnet-de-prix-${todayISO()}.csv`;
+    const data = buildCSV();
+    if (!downloads && window.claude && typeof window.claude.use === "function") {
+      try { downloads = await claude.use("downloads"); } catch { downloads = null; }
+    }
+    if (downloads) {
+      try { await downloads.save({ filename, data }); toast("Fichier CSV exporté."); }
+      catch (e) {
+        if (e?.code === "declined") return;
+        toast(e?.code === "rate_limited" ? "Un téléchargement est déjà en attente de confirmation."
+          : "L’export n’est pas disponible ici.");
+      }
+      return;
+    }
+    // Hors de Claude : téléchargement classique du navigateur
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([data], { type: "text/csv;charset=utf-8" }));
+    a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    toast("Fichier CSV exporté.");
+  });
+
+  function parseCSV(text) {
+    text = text.replace(/^\uFEFF/, "");
+    const first = text.split(/\r?\n/, 1)[0] || "";
+    const count = ch => first.split(ch).length - 1;
+    const sep = [";", "\t", ","].sort((a, b) => count(b) - count(a))[0];
+    const rows = []; let row = [], cell = "", q = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (q) {
+        if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; }
+        else cell += c;
+      } else if (c === '"') q = true;
+      else if (c === sep) { row.push(cell); cell = ""; }
+      else if (c === "\n" || c === "\r") {
+        if (c === "\r" && text[i + 1] === "\n") i++;
+        row.push(cell); rows.push(row); row = []; cell = "";
+      } else cell += c;
+    }
+    if (cell !== "" || row.length) { row.push(cell); rows.push(row); }
+    return rows.filter(r => r.some(c => c.trim() !== ""));
+  }
+
+  function mapHeader(h) {
+    const k = norm(h).replace(/[^a-z0-9]/g, "");
+    if (/^(produit|article|nom|product|name|artikel|libelle|designation)/.test(k)) return "produit";
+    if (/^(marque|brand|merk|fabricant)/.test(k)) return "marque";
+    if (/^(magasin|store|winkel|enseigne|shop|supermarche)/.test(k)) return "magasin";
+    if (/^(codebarre|ean|barcode|gtin|streepjescode)/.test(k)) return "ean";
+    if (/(prix|prijs|price).*(unit|kg|kilo|litre|liter|eenheid|aul)|eenheidsprijs|unitprice/.test(k)) return "prixUnite";
+    if (/^(unite|unit|eenheid)$/.test(k)) return "unite";
+    if (/^(prix|price|prijs|montant|bedrag)/.test(k)) return "prix";
+    if (/^(date|datum|jour|day)/.test(k)) return "date";
+    if (/^(quantite|quantity|contenu|hoeveelheid|format|poids|volume)/.test(k)) return "quantite";
+    return null;
+  }
+
+  function parseDate(s) {
+    const t = String(s || "").trim();
+    if (!t) return { ts: isoToTs(todayISO()), empty: true };
+    let m = t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (m) return valid(+m[1], +m[2], +m[3]);
+    m = t.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/);
+    if (m) return valid(m[3].length === 2 ? 2000 + +m[3] : +m[3], +m[2], +m[1]);
+    return null;
+    function valid(y, mo, d) {
+      const dt = new Date(y, mo - 1, d, 12);
+      return dt.getFullYear() === y && dt.getMonth() === mo - 1 && dt.getDate() === d ? { ts: dt.getTime() } : null;
+    }
+  }
+
+  const dupKey = r => [norm(r.produit), norm(r.magasin), Number(r.prix).toFixed(2), tsToIso(r.date)].join("|");
+
+  function analyse(text) {
+    const rows = parseCSV(text);
+    if (rows.length < 2) return { error: "Le fichier ne contient aucune ligne de données sous la ligne d’en-tête." };
+    const map = rows[0].map(mapHeader);
+    if (!map.includes("produit") || !map.includes("prix"))
+      return { error: "Colonnes Produit et Prix introuvables dans la première ligne du fichier. Ajoute une ligne d’en-tête avec au moins ces deux noms." };
+    const ignored = rows[0].filter((h, i) => !map[i] && h.trim());
+    const existing = new Map(state.releves.map(r => [dupKey(r), r]));
+    const ok = [], errors = []; let dups = 0, undated = 0, brandFills = 0;
+    const now = Date.now();
+    rows.slice(1).forEach((cells, idx) => {
+      const line = idx + 2, o = {};
+      map.forEach((k, i) => { if (k && o[k] == null) o[k] = (cells[i] ?? "").trim(); });
+      if (!o.produit) return errors.push(`Ligne ${line} : produit manquant.`);
+      const prix = parseNum(o.prix);
+      if (prix == null) return errors.push(`Ligne ${line} : prix illisible (« ${o.prix || "vide"} »).`);
+      const d = parseDate(o.date);
+      if (!d) return errors.push(`Ligne ${line} : date illisible (« ${o.date} »).`);
+      if (d.empty) undated++;
+      const known = state.releves.find(r => norm(r.produit) === norm(o.produit)) || ok.find(r => norm(r.produit) === norm(o.produit));
+      const pu = parseNum(o.prixUnite);
+      const unite = (o.unite || "").toLowerCase().replace(/^(litre|liter)$/, "l").replace(/^(piece|pièce|stuk|pc)$/, "pièce");
+      const rec = {
+        produit: known ? known.produit : o.produit,
+        magasin: o.magasin || "",
+        prix,
+        prixUnite: pu,
+        unite: pu != null ? (["kg", "l", "pièce"].includes(unite) ? unite : "kg") : null,
+        marque: o.marque || null,
+        quantite: o.quantite || null,
+        ean: (o.ean || "").replace(/\D/g, "") || null,
+        date: d.ts,
+        createdAt: now + idx
+      };
+      const key = dupKey(rec);
+      const prev = existing.get(key);
+      if (prev) {
+        // Relevé déjà présent : on complète seulement la marque si elle manquait
+        if (rec.marque && !prev.marque && prev.id) { ok.push({ ...prev, marque: rec.marque }); brandFills++; }
+        else dups++;
+        return;
+      }
+      existing.set(key, rec); ok.push(rec);
+    });
+    return { ok, errors, dups, undated, brandFills, ignored, total: rows.length - 1 };
+  }
+
+  function resetImport() {
+    pending = null;
+    $("importArea").innerHTML = `<button type="button" class="btn" id="pickCsv">Choisir un fichier CSV</button>`;
+  }
+
+  $("csvFile").addEventListener("change", async () => {
+    const file = $("csvFile").files?.[0];
+    $("csvFile").value = "";
+    if (!file) return;
+    if (!$("dataDlg").open) openData();
+    let text;
+    try {
+      const buf = await file.arrayBuffer();
+      try { text = new TextDecoder("utf-8", { fatal: true }).decode(buf); }
+      catch { text = new TextDecoder("windows-1252").decode(buf); } // anciens exports Excel
+    } catch { return showImportError("Le fichier n’a pas pu être lu."); }
+    const res = analyse(text);
+    if (res.error) return showImportError(res.error);
+    pending = res.ok;
+    const n = res.ok.length, fills = res.brandFills, nNew = n - fills;
+    const notes = [];
+    if (res.dups) notes.push(`${res.dups} déjà présent${res.dups > 1 ? "s" : ""} dans ton carnet, ignoré${res.dups > 1 ? "s" : ""}.`);
+    if (res.errors.length) notes.push(`${res.errors.length} ligne${res.errors.length > 1 ? "s" : ""} ignorée${res.errors.length > 1 ? "s" : ""} :`);
+    const errList = res.errors.slice(0, 5).map(e => `<li>${esc(e)}</li>`).join("") + (res.errors.length > 5 ? `<li>et ${res.errors.length - 5} autre${res.errors.length - 5 > 1 ? "s" : ""}.</li>` : "");
+    const extra = [];
+    if (fills) extra.push(`${fills} relevé${fills > 1 ? "s" : ""} déjà présent${fills > 1 ? "s" : ""} : seule la marque y sera ajoutée.`);
+    if (res.undated) extra.push(`${res.undated} ligne${res.undated > 1 ? "s" : ""} sans date, datée${res.undated > 1 ? "s" : ""} d’aujourd’hui.`);
+    if (res.ignored.length) extra.push(`Colonne${res.ignored.length > 1 ? "s" : ""} non reconnue${res.ignored.length > 1 ? "s" : ""}, ignorée${res.ignored.length > 1 ? "s" : ""} : ${res.ignored.join(", ")}.`);
+    $("importArea").innerHTML = `
+      <div class="summary"><strong>${n ? (nNew ? `${nNew} relevé${nNew > 1 ? "s" : ""} à importer` : "Aucun nouveau relevé") + (fills ? `, ${fills} marque${fills > 1 ? "s" : ""} à compléter` : "") : "Aucun nouveau relevé à importer"}</strong>
+        <span style="color:var(--muted);font-size:.88rem">${esc(file.name)} : ${res.total} ligne${res.total > 1 ? "s" : ""} lue${res.total > 1 ? "s" : ""}. ${esc(notes[0] && res.dups ? notes[0] : "")}</span>
+        ${res.errors.length ? `<ul><li style="list-style:none;margin-left:-18px">${esc(notes[notes.length - 1])}</li>${errList}</ul>` : ""}
+        ${extra.length ? `<ul>${extra.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+      </div>
+      ${n ? `<div class="preview"><table><thead><tr><th>Date</th><th>Produit</th><th>Marque</th><th>Magasin</th><th class="n">Prix</th></tr></thead><tbody>
+        ${res.ok.slice(0, 5).map(r => `<tr><td>${esc(shortDate.format(r.date))}</td><td>${esc(r.produit)}</td><td>${esc(r.marque || "—")}</td><td>${esc(r.magasin || "—")}</td><td class="n">${esc(eur.format(r.prix))}</td></tr>`).join("")}
+        </tbody></table>${n > 5 ? `<p class="hint" style="margin:6px 0 0">Aperçu des 5 premiers.</p>` : ""}</div>` : ""}
+      <div style="display:flex;gap:10px">
+        <button type="button" class="btn" id="cancelImport" style="flex:1">${n ? "Annuler" : "Choisir un autre fichier"}</button>
+        ${n ? `<button type="button" class="btn primary" id="doImport" style="flex:1">${nNew ? `Importer ${nNew} relevé${nNew > 1 ? "s" : ""}` : `Compléter ${fills} marque${fills > 1 ? "s" : ""}`}</button>` : ""}
+      </div>`;
+  });
+
+  function showImportError(msg) {
+    pending = null;
+    $("importArea").innerHTML = `<div class="summary"><strong>Import impossible</strong><span style="color:var(--muted);font-size:.9rem">${esc(msg)}</span></div>
+      <button type="button" class="btn" id="pickCsv">Choisir un autre fichier</button>`;
+  }
+
+  $("importArea").addEventListener("click", async e => {
+    if (e.target.closest("#pickCsv")) return $("csvFile").click();
+    if (e.target.closest("#cancelImport")) { if (pending?.length) return resetImport(); return $("csvFile").click(); }
+    const go = e.target.closest("#doImport");
+    if (!go || !pending?.length) return;
+    const recs = pending; pending = null;
+    go.disabled = true; $("cancelImport").disabled = true;
+    try {
+      const failed = await Store.saveMany(recs, (d, t) => { go.textContent = `Import… ${d} / ${t}`; });
+      const okN = recs.length - failed;
+      $("dataDlg").close();
+      toast(failed ? `${okN} relevés importés, ${failed} en échec. Relance l’import : les doublons seront ignorés.` : "Import terminé.");
+    } catch (err) {
+      toast(err?.code === "quota_exceeded" ? "Le carnet est plein : une partie seulement a été importée."
+        : err?.code === "invalid_argument" ? "Tu n’as pas le droit de modifier ce carnet."
+        : "L’import a échoué. Relance-le : les relevés déjà importés seront ignorés.");
+      resetImport();
+    }
+  });
+
+  // ---------- Événements ----------
+  $("dataBtn").addEventListener("click", openData);
+  $("manualBtn").addEventListener("click", () => openForm());
+  $("q").addEventListener("input", e => { state.q = e.target.value; render(); });
+  $("sort").addEventListener("change", e => { state.sort = e.target.value; render(); });
+  document.querySelectorAll(".seg [data-view]").forEach(b => b.addEventListener("click", () => {
+    state.view = b.dataset.view;
+    try { history.replaceState(null, "", "#" + state.view); } catch {}
+    render();
+  }));
+  document.addEventListener("click", e => {
+    const prod = e.target.closest("[data-prod]");
+    if (prod) return openProduct(prod.dataset.prod);
+    const ed = e.target.closest("[data-edit]");
+    if (ed) { const r = state.releves.find(x => x.id === ed.dataset.edit); if (r) openForm(r, r.id); return; }
+    const cl = e.target.closest("[data-close]");
+    if (cl) { scanCtl?.abort(); cl.closest("dialog").close(); }
+  });
+  $("formDlg").addEventListener("close", () => { scanCtl?.abort(); const s = $("scanImg").src; if (s.startsWith("blob:")) URL.revokeObjectURL(s); });
+
+  let toastTimer;
+  function toast(msg) {
+    let t = document.querySelector(".toast");
+    if (!t) { t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+    t.textContent = msg;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.remove(), 3200);
+  }
+
+  const h = location.hash.slice(1);
+  if (h === "historique" || h === "produits") state.view = h;
+  Store.init();
+  initSample();
+})();
+</script>
+</body>
+</html>
