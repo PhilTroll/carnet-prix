@@ -130,8 +130,12 @@ h1 {
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
   background: linear-gradient(to top, var(--bg) 70%, transparent);
 }
-.actions .inner { max-width: 720px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 10px; }
-.actions .btn { white-space: nowrap; }
+.actions .inner { max-width: 720px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 8px; }
+.actions .btn { white-space: nowrap; padding: 14px 10px; min-width: 0; gap: 6px; }
+.actions .btn .lbl { overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 420px) { .actions .btn .long { display: none; } }
+.tagbtn { background: none; border: 0; padding: 4px; margin: -4px; cursor: pointer; font: inherit; color: inherit; border-radius: 6px; }
+.tagbtn:active .tag { transform: scale(.96); }
 .btn {
   border: 1px solid var(--line); background: var(--surface); border-radius: 12px;
   padding: 14px 18px; font-weight: 600; cursor: pointer; min-height: 52px;
@@ -173,7 +177,9 @@ dialog::backdrop { background: rgb(0 0 0 / .45); }
 }
 .field input.read { box-shadow: inset 0 -3px 0 var(--tag); }
 .field.price input { font: 700 1.8rem "Barlow Condensed", "Arial Narrow", sans-serif; padding: 8px 12px; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.field input[type="date"] { -webkit-appearance: none; appearance: none; display: block; min-width: 0; max-width: 100%; min-height: 46px; text-align: left; }
+.field input[type="date"]::-webkit-date-and-time-value { text-align: left; }
 .scanbox {
   display: grid; grid-template-columns: 72px 1fr; gap: 12px; align-items: center;
   padding: 10px; border: 1px solid var(--line); border-radius: 12px; margin-bottom: 16px; background: var(--bg);
@@ -265,7 +271,7 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
         </button>
       </div>
     </div>
-    <input class="search" id="q" type="search" placeholder="Rechercher un produit, une marque, un magasin" autocomplete="off">
+    <input class="search" id="q" type="search" placeholder="Rechercher : produit, marque, magasin" autocomplete="off">
     <div class="controls">
       <div class="seg" role="group" aria-label="Affichage">
         <button type="button" data-view="produits" aria-pressed="true">Produits</button>
@@ -289,11 +295,11 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
   <div class="inner">
     <button class="btn primary" id="scanBtn" type="button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 8v8M10 8v8M13 8v8M16 8v8"/></svg>
-      Scanner l’étiquette
+      <span class="lbl">Scanner<span class="long"> l’étiquette</span></span>
     </button>
     <button class="btn" id="manualBtn" type="button" aria-label="Saisir un prix à la main">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-      Saisir
+      <span class="lbl">Saisir</span>
     </button>
   </div>
 </div>
@@ -427,7 +433,7 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
   const dateY = new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", year: "numeric" });
 
   // ---------- État ----------
-  const state = { releves: [], view: "produits", q: "", sort: "recent", ready: false };
+  const state = { releves: [], view: "produits", q: "", sort: "recent", ready: false, flip: new Set() };
   const $ = id => document.getElementById(id);
 
   // ---------- Stockage : carnet privé (db) ou, à défaut, ce navigateur ----------
@@ -567,6 +573,33 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
   }
   function bindEmpty() { const b = $("emptyManual"); if (b) b.onclick = () => openForm(); const i = $("emptyImport"); if (i) i.onclick = () => openData(); }
 
+  // Étiquette jaune : prix du paquet ou prix au kg / l, au choix (on touche l'étiquette pour basculer)
+  function tagView(p) {
+    const L = p.last, prev = p.prev;
+    const vrac = L.prixUnite != null && Math.abs(L.prix - L.prixUnite) < 0.005 && /^au /i.test(L.quantite || "");
+    const canUnit = L.prixUnite != null;
+    const defUnit = !!p.basis || vrac;
+    const unit = canUnit && (state.flip.has(p.key) ? !defUnit : defUnit);
+    const per = unit ? (L.unite || "kg") : null;
+    const v = r => unit ? (r.prixUnite != null && (r.unite || "kg") === per ? r.prixUnite : null) : r.prix;
+    let delta = null, before = null;
+    // Pas de variation au prix du paquet quand les formats diffèrent : elle serait trompeuse
+    if (prev && v(prev) > 0 && (unit || !p.basis)) { const d = v(L) - v(prev); delta = { abs: d, pct: d / v(prev), per }; before = v(prev); }
+    return { value: v(L), per, delta, before, canFlip: canUnit && !vrac, vrac };
+  }
+  function flipTag(key) {
+    const p = products().find(x => x.key === key);
+    if (!p) return;
+    const tv = tagView(p);
+    if (!tv.canFlip) {
+      toast(tv.vrac ? `Ce prix est déjà ${perAu(p.last.unite || "kg")} (vrac).`
+        : "Prix au kg / l inconnu pour ce relevé : indique le contenu du paquet (poids, volume ou nombre de pièces).");
+      return;
+    }
+    if (state.flip.has(key)) state.flip.delete(key); else state.flip.add(key);
+    render();
+  }
+
   function productsHTML() {
     let list = products().filter(p => p.items.some(matches) || norm(p.name).includes(norm(state.q)));
     const by = {
@@ -582,11 +615,12 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
       const bestNote = stores > 1
         ? `<span class="best">Moins cher chez ${esc(p.best.magasin || "magasin inconnu")}</span>`
         : esc(p.last.magasin || "Magasin non indiqué");
-      return `<li><button type="button" class="row" data-prod="${esc(p.key)}">
+      const tv = tagView(p);
+      return `<li><div class="row" role="button" tabindex="0" data-prod="${esc(p.key)}">
         <div><div class="name">${esc(p.name)}</div>
           <div class="meta">${p.last.marque ? esc(p.last.marque) + ", " : ""}${bestNote}, ${esc(shortDate.format(p.last.date))}${p.last.quantite ? ", " + esc(p.last.quantite) : ""}</div></div>
-        <div class="right">${tagHTML(p.val(p.last), "", p.basis)}${deltaHTML(p.delta)}${p.delta && Math.abs(p.delta.abs) >= 0.005 ? `<span class="delta" style="color:var(--muted);font-weight:500">avant ${esc(num2.format(p.val(p.prev)))} €</span>` : ""}</div>
-      </button></li>`;
+        <div class="right"><button type="button" class="tagbtn" data-flip="${esc(p.key)}" aria-label="${tv.per ? "Afficher le prix du paquet" : "Afficher le prix " + perAu(p.last.unite || "kg")}">${tagHTML(tv.value, "", tv.per)}</button>${deltaHTML(tv.delta)}${tv.delta && Math.abs(tv.delta.abs) >= 0.005 ? `<span class="delta" style="color:var(--muted);font-weight:500">avant ${esc(num2.format(tv.before))} €${esc(perShort(tv.per))}</span>` : ""}</div>
+      </div></li>`;
     }).join("")}</ul>`;
   }
 
@@ -1561,7 +1595,12 @@ N'invente rien : mets null pour tout ce qui n'est pas lisible sur la photo. Ne c
     try { history.replaceState(null, "", "#" + state.view); } catch {}
     render();
   }));
+  document.addEventListener("keydown", e => {
+    if ((e.key === "Enter" || e.key === " ") && e.target.matches?.(".row[role=button][data-prod]")) { e.preventDefault(); openProduct(e.target.dataset.prod); }
+  });
   document.addEventListener("click", e => {
+    const fl = e.target.closest("[data-flip]");
+    if (fl) return flipTag(fl.dataset.flip);
     const prod = e.target.closest("[data-prod]");
     if (prod) return openProduct(prod.dataset.prod);
     const ed = e.target.closest("[data-edit]");
