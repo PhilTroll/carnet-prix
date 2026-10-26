@@ -526,9 +526,10 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
       p.current = [...byStore.values()].sort((a, b) => v(a) - v(b));
       p.best = p.current[0];
       // Variation : dernier relevé vs relevé précédent dans le même magasin
-      const sameStore = p.items.filter(r => norm(r.magasin) === norm(p.last.magasin));
+      // Variation du prix le moins cher : son dernier relevé vs le précédent dans le même magasin
+      const sameStore = p.items.filter(r => norm(r.magasin) === norm(p.best.magasin));
       const prev = p.prev = sameStore.length > 1 ? sameStore[sameStore.length - 2] : null;
-      p.delta = prev && v(prev) > 0 ? { abs: v(p.last) - v(prev), pct: (v(p.last) - v(prev)) / v(prev), per: p.basis } : null;
+      p.delta = prev && v(prev) > 0 ? { abs: v(p.best) - v(prev), pct: (v(p.best) - v(prev)) / v(prev), per: p.basis } : null;
     }
     return [...map.values()];
   }
@@ -575,7 +576,7 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
 
   // Étiquette jaune : prix du paquet ou prix au kg / l, au choix (on touche l'étiquette pour basculer)
   function tagView(p) {
-    const L = p.last, prev = p.prev;
+    const L = p.best, prev = p.prev;
     const vrac = L.prixUnite != null && Math.abs(L.prix - L.prixUnite) < 0.005 && /^au /i.test(L.quantite || "");
     const canUnit = L.prixUnite != null;
     const defUnit = !!p.basis || vrac;
@@ -592,7 +593,7 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
     if (!p) return;
     const tv = tagView(p);
     if (!tv.canFlip) {
-      toast(tv.vrac ? `Ce prix est déjà ${perAu(p.last.unite || "kg")} (vrac).`
+      toast(tv.vrac ? `Ce prix est déjà ${perAu(p.best.unite || "kg")} (vrac).`
         : "Prix au kg / l inconnu pour ce relevé : indique le contenu du paquet (poids, volume ou nombre de pièces).");
       return;
     }
@@ -614,12 +615,12 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
       const stores = p.current.length;
       const bestNote = stores > 1
         ? `<span class="best">Moins cher chez ${esc(p.best.magasin || "magasin inconnu")}</span>`
-        : esc(p.last.magasin || "Magasin non indiqué");
+        : esc(p.best.magasin || "Magasin non indiqué");
       const tv = tagView(p);
       return `<li><div class="row" role="button" tabindex="0" data-prod="${esc(p.key)}">
         <div><div class="name">${esc(p.name)}</div>
-          <div class="meta">${p.last.marque ? esc(p.last.marque) + ", " : ""}${bestNote}, ${esc(shortDate.format(p.last.date))}${p.last.quantite ? ", " + esc(p.last.quantite) : ""}</div></div>
-        <div class="right"><button type="button" class="tagbtn" data-flip="${esc(p.key)}" aria-label="${tv.per ? "Afficher le prix du paquet" : "Afficher le prix " + perAu(p.last.unite || "kg")}">${tagHTML(tv.value, "", tv.per)}</button>${deltaHTML(tv.delta)}${tv.delta && Math.abs(tv.delta.abs) >= 0.005 ? `<span class="delta" style="color:var(--muted);font-weight:500">avant ${esc(num2.format(tv.before))} €${esc(perShort(tv.per))}</span>` : ""}</div>
+          <div class="meta">${p.best.marque ? esc(p.best.marque) + ", " : ""}${bestNote}, ${esc(shortDate.format(p.best.date))}${p.best.quantite ? ", " + esc(p.best.quantite) : ""}</div></div>
+        <div class="right"><button type="button" class="tagbtn" data-flip="${esc(p.key)}" aria-label="${tv.per ? "Afficher le prix du paquet" : "Afficher le prix " + perAu(p.best.unite || "kg")}">${tagHTML(tv.value, "", tv.per)}</button>${deltaHTML(tv.delta)}${tv.delta && Math.abs(tv.delta.abs) >= 0.005 ? `<span class="delta" style="color:var(--muted);font-weight:500">avant ${esc(num2.format(tv.before))} €${esc(perShort(tv.per))}</span>` : ""}</div>
       </div></li>`;
     }).join("")}</ul>`;
   }
@@ -660,7 +661,7 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
     const hasBrand = p.current.some(r => r.marque);
     $("prodBody").innerHTML = `
       <div class="hero">
-        <div>${tagHTML(p.val(p.last), "big", p.basis)}<div class="who">${p.last.marque ? esc(p.last.marque) + ", " : ""}${esc(p.last.magasin || "Magasin non indiqué")}, ${esc(dayFmt.format(p.last.date))}</div></div>
+        <div>${tagHTML(p.val(p.best), "big", p.basis)}<div class="who">${p.current.length > 1 ? "Le moins cher : " : ""}${p.best.marque ? esc(p.best.marque) + ", " : ""}${esc(p.best.magasin || "Magasin non indiqué")}, ${esc(dayFmt.format(p.best.date))}</div></div>
         <div>${deltaHTML(p.delta)}</div>
       </div>
       ${p.items.length > 1 ? (p.basis ? `<p class="hint" style="margin:12px 0 0">Formats différents : les prix sont comparés au ${p.basis === "l" ? "litre" : p.basis === "pièce" ? "pièce" : "kg"}.</p>` : "") + chartSVG(p.items, k => color(k), p.val, p.basis) + `<div class="legend">${storeNames.map(([k, n]) => `<span><i style="background:${color(k)}"></i>${esc(n)}</span>`).join("")}</div>` : `<p class="hint" style="margin:12px 0 0">Le graphique apparaîtra dès le deuxième relevé de ce produit.</p>`}
