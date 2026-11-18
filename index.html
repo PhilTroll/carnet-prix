@@ -187,6 +187,34 @@ dialog::backdrop { background: rgb(0 0 0 / .45); }
   padding: 10px; border: 1px solid var(--line); border-radius: 12px; margin-bottom: 16px; background: var(--bg);
 }
 .scanbox img { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; }
+.scanbox.noimg { grid-template-columns: 1fr; }
+.scanbox.noimg img { display: none; }
+.choice { display: grid; gap: 10px; }
+.choice button { display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: center; text-align: left; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); cursor: pointer; }
+.choice button svg { width: 32px; height: 32px; }
+.choice b { display: block; font-size: 1.02rem; }
+.choice small { display: block; color: var(--muted); font-size: .86rem; margin-top: 2px; }
+.choice button:disabled { opacity: .5; cursor: not-allowed; }
+.xp { display: inline-block; font: 600 .68rem/1 "Barlow", system-ui, sans-serif; text-transform: uppercase; letter-spacing: .05em; padding: 3px 5px; border-radius: 4px; background: var(--line); color: var(--muted); vertical-align: 2px; margin-left: 4px; }
+.bcwrap { position: relative; background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 3 / 4; max-height: 62vh; margin: 0 auto 12px; }
+.bcwrap video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.bcframe { position: absolute; left: 10%; right: 10%; top: 32%; height: 36%; border: 3px solid var(--tag); border-radius: 10px; box-shadow: 0 0 0 9999px rgb(0 0 0 / .38); pointer-events: none; }
+.bcline { position: absolute; left: 6%; right: 6%; top: 50%; height: 2px; background: #FF4D4D; opacity: .8; }
+.bcstatus { text-align: center; color: var(--muted); font-size: .95rem; min-height: 2.6em; margin: 0 0 12px; }
+.quicksearch { width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); margin-bottom: 10px; }
+.quicknew { width: 100%; margin-bottom: 6px; }
+#quickList .row { padding: 12px 4px; }
+.helpbtn { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--bg); font: 700 .95rem/1 "Barlow", system-ui, sans-serif; color: var(--muted); cursor: pointer; }
+.helpbtn[aria-expanded="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.bubble { position: relative; margin: 4px 0 14px; padding: 12px 14px 8px; border-radius: 12px; background: var(--ink); color: var(--bg); font-size: .9rem; line-height: 1.4; }
+.bubble::before { content: ""; position: absolute; top: -8px; left: 28px; border: 8px solid transparent; border-top: 0; border-bottom-color: var(--ink); }
+.bubble ol { margin: 6px 0 6px; padding-left: 20px; }
+.bubble li { margin-bottom: 4px; }
+.bubble p { margin: 0 0 2px; opacity: .85; }
+.bubble .link { color: var(--tag); padding: 6px 0; float: right; }
+.bubble::after { content: ""; display: block; clear: both; }
+#formDlg .dlg-foot .btn { white-space: nowrap; padding-left: 8px; padding-right: 8px; min-width: 0; }
+#saveNextBtn { font-size: .95rem; }
 .scanbox .st { font-weight: 600; }
 .scanbox .sub { color: var(--muted); font-size: .88rem; }
 .spinner {
@@ -245,8 +273,8 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
 .iconbtn { white-space: nowrap; flex: none; }
 .title-row h1 { min-width: 0; }
 [hidden] { display: none !important; }
-.titles { min-width: 0; }
-.byline { margin: 3px 0 0; font-size: .8rem; color: var(--muted); letter-spacing: .02em; }
+.titles { min-width: 0; display: inline-grid; }
+.byline { margin: 3px 0 0; width: 0; min-width: 100%; font: 500 .8rem/1.2 "Barlow Condensed", "Arial Narrow", sans-serif; color: var(--muted); letter-spacing: .02em; white-space: nowrap; overflow: hidden; }
 .bio { display: inline-block; background: #2E8B3D; color: #fff; font: 700 .66rem/1 "Barlow", system-ui, sans-serif; letter-spacing: .05em; padding: 3px 4px 2px; border-radius: 3px; margin-left: 6px; vertical-align: 3px; white-space: nowrap; }
 .biochk { display: flex; align-items: center; gap: 10px; margin: -2px 0 14px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); cursor: pointer; }
 .biochk input { width: 22px; height: 22px; accent-color: #2E8B3D; margin: 0; }
@@ -270,13 +298,20 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
 .preview { overflow-x: auto; margin: 0 0 12px; }
 .preview table { font-size: .85rem; min-width: 420px; }
 .note { font-size: .82rem; color: var(--muted); margin-top: 18px; }
+.backup { margin: 4px 0 6px; padding: 12px; border-radius: 12px; border: 1px solid #E8A33D; background: color-mix(in srgb, #F5A524 16%, var(--surface)); }
+.backup b { display: block; margin-bottom: 2px; }
+.backup p { margin: 0 0 10px; font-size: .9rem; color: var(--muted); }
+.backup .row2 { display: flex; gap: 8px; }
+.backup .btn { min-height: 44px; padding: 10px 14px; flex: 1; white-space: nowrap; }
+.backup .btn.later { flex: 0 0 auto; }
+.lastsave { font-size: .85rem; color: var(--muted); margin: -4px 0 12px; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <div class="title-row">
-      <div class="titles"><h1>Carnet de prix</h1><p class="byline">by Philippe Englebert</p></div>
+      <div class="titles"><h1>Carnet de prix</h1><p class="byline" id="byline">Proposé par Philippe Englebert</p></div>
       <div class="head-right">
         <span class="count" id="count"></span>
         <button type="button" class="iconbtn" id="dataBtn">
@@ -301,6 +336,7 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
       </label>
     </div>
   </header>
+  <div class="backup" id="backupBanner" hidden role="status"></div>
   <main id="main"><p class="loading">Ouverture du carnet…</p></main>
   <p class="note" id="storeNote"></p>
 </div>
@@ -369,10 +405,78 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
       <button type="button" class="btn danger" id="delBtn" hidden style="width:100%">Supprimer ce relevé</button>
     </div>
     <div class="dlg-foot">
+      <button type="submit" class="btn" id="saveNextBtn" hidden>Enregistrer + suivant</button>
       <button type="submit" class="btn primary" id="saveBtn">Enregistrer</button>
     </div>
   </form>
 </dialog>
+
+<!-- Choix du produit (ajout rapide) -->
+<dialog id="quickDlg" aria-labelledby="quickTitle">
+  <div class="dlg">
+    <div class="dlg-head">
+      <h2 id="quickTitle">Quel produit ?</h2>
+      <div style="display:flex;align-items:center;gap:4px">
+        <button type="button" class="helpbtn" id="quickHelpBtn" aria-label="Comment ça marche ?" aria-expanded="false" aria-controls="quickHelp">?</button>
+        <button type="button" class="link" data-close>Fermer</button>
+      </div>
+    </div>
+    <div class="dlg-body">
+      <input class="quicksearch" id="quickQ" type="search" placeholder="Chercher dans tes produits" autocomplete="off" aria-describedby="quickHelp">
+      <div class="bubble" id="quickHelp" role="note" hidden>
+        <b>Comment ça marche</b>
+        <ol>
+          <li><b>Touche un produit</b> de la liste : son nom, sa marque, le bio, le type de prix (paquet, au kg, au litre) et ton dernier magasin sont repris.</li>
+          <li><b>Tape juste le prix</b>, puis « Enregistrer ».</li>
+          <li><b>« Enregistrer + suivant »</b> te ramène ici pour enchaîner l’article suivant.</li>
+        </ol>
+        <p>Tape quelques lettres ici pour retrouver un produit. Pas dans la liste ? Touche « Nouveau produit ».</p>
+        <button type="button" class="link" id="quickHelpOk">Compris</button>
+      </div>
+      <button type="button" class="btn quicknew" id="quickNew">+ Nouveau produit</button>
+      <ul class="list" id="quickList"></ul>
+    </div>
+  </div>
+</dialog>
+
+<!-- Choix du mode de scan -->
+<dialog id="scanDlg" aria-labelledby="scanTitle">
+  <div class="dlg">
+    <div class="dlg-head">
+      <h2 id="scanTitle">Scanner</h2>
+      <button type="button" class="link" data-close>Fermer</button>
+    </div>
+    <div class="dlg-body">
+      <div class="choice">
+        <button type="button" id="scanBarcode">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6v12M7 6v12M10 6v12M14 6v12M17 6v12M20 6v12"/></svg>
+          <span><b>Code-barres</b><small>Reconnaît un produit déjà relevé, ou trouve son nom dans Open Food Facts. Le plus fiable pour les produits emballés.</small></span>
+        </button>
+        <button type="button" id="scanPhoto">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+          <span><b>Photo de l’étiquette<span class="xp" id="photoXp">expérimental</span></b><small id="photoDesc">Essaie de lire le prix et le nom sur la photo. Souvent imprécis : vérifie tout.</small></span>
+        </button>
+      </div>
+      <p class="hint" style="margin:16px 0 0">Astuce iPhone : dans le champ Prix, touche-le deux fois puis « Scanner le texte » pour lire le prix avec l’appareil photo.</p>
+    </div>
+  </div>
+</dialog>
+
+<!-- Scan du code-barres en direct -->
+<dialog id="bcDlg" aria-labelledby="bcTitle">
+  <div class="dlg">
+    <div class="dlg-head">
+      <h2 id="bcTitle">Code-barres</h2>
+      <button type="button" class="link" data-close>Annuler</button>
+    </div>
+    <div class="dlg-body">
+      <div class="bcwrap" id="bcWrap"><video id="bcVideo" playsinline muted autoplay></video><div class="bcframe"><div class="bcline"></div></div></div>
+      <p class="bcstatus" id="bcStatus">Ouverture de la caméra…</p>
+      <button type="button" class="btn" id="bcPhotoBtn" style="width:100%">Prendre plutôt une photo du code-barres</button>
+    </div>
+  </div>
+</dialog>
+<input type="file" id="bcPhoto" accept="image/*" capture="environment" hidden>
 
 <!-- Fiche produit -->
 <dialog id="prodDlg" aria-labelledby="prodTitle">
@@ -396,6 +500,7 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
     <div class="dlg-body">
       <section class="panel">
         <h3>Exporter</h3>
+        <p class="lastsave" id="lastSave"></p>
         <p id="exportInfo"></p>
         <button type="button" class="btn primary" id="exportBtn">Exporter en CSV</button>
       </section>
@@ -429,7 +534,11 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
     if (s == null) return null;
     const t = String(s).replace(/€/g, "").replace(/\s/g, "").replace(",", ".");
     if (!t) return null;
-    const n = Number(t);
+    let n = Number(t);
+    if (!Number.isFinite(n)) {
+      const m = String(s).match(/(\d{1,5})(?:\s*[.,€]\s*(\d{1,2}))?/);
+      n = m ? Number(m[1]) + (m[2] ? Number(m[2].padEnd(2, "0")) / 100 : 0) : NaN;
+    }
     return Number.isFinite(n) && n >= 0 ? Math.round(n * 100) / 100 : null;
   };
   const todayISO = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
@@ -477,7 +586,7 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
         render();
       }
     },
-    persistLocal() { try { localStorage.setItem(LS_KEY, JSON.stringify(state.releves)); } catch {} },
+    persistLocal() { try { localStorage.setItem(LS_KEY, JSON.stringify(state.releves)); localStorage.setItem(LS_KEY + ".changed", String(Date.now())); } catch {} },
     async save(r) {
       const body = { ...r }; delete body.id;
       if (this.mode === "db") {
@@ -572,9 +681,36 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
     $("sortWrap").hidden = state.view !== "produits";
     updateDatalists();
 
+    renderBackup();
     const main = $("main");
     if (!total) { main.innerHTML = emptyHTML(); bindEmpty(); return; }
     main.innerHTML = state.view === "produits" ? productsHTML() : historyHTML();
+  }
+
+  // ----- Rappel de sauvegarde (version hors Claude : les données ne vivent que sur l'appareil) -----
+  const BK_DAYS = 7;
+  const lsGet = k => { try { return Number(localStorage.getItem(LS_KEY + k)) || 0; } catch { return 0; } };
+  const lsSet = (k, v) => { try { localStorage.setItem(LS_KEY + k, String(v)); } catch {} };
+  const daysSince = t => Math.floor((Date.now() - t) / 864e5);
+  function lastSaveText() {
+    const t = lsGet(".backup");
+    if (!t) return "Aucune sauvegarde faite depuis cet appareil.";
+    const d = daysSince(t);
+    return `Dernière sauvegarde : ${dateY.format(t)} (${d === 0 ? "aujourd’hui" : d === 1 ? "hier" : `il y a ${d} jours`}).`;
+  }
+  function renderBackup() {
+    const el = $("backupBanner");
+    const last = lsGet(".backup"), changed = lsGet(".changed") || (state.releves.length ? 1 : 0), snooze = lsGet(".snooze");
+    const due = Store.mode === "local" && state.releves.length > 0 && changed > last &&
+      (!last || daysSince(last) >= BK_DAYS) && Date.now() > snooze;
+    if (!due) { el.hidden = true; el.innerHTML = ""; return; }
+    const n = state.releves.length;
+    el.innerHTML = `<b>${last ? `Pense à sauvegarder ton carnet` : `Tes ${n} relevé${n > 1 ? "s" : ""} ne sont pas encore sauvegardés`}</b>
+      <p>${last ? `Dernière sauvegarde il y a ${daysSince(last)} jours. ` : ""}Ton carnet n’existe que sur cet appareil : s’il est perdu, ou si Safari efface ses données, tout disparaît. Enregistre le fichier dans Fichiers ou iCloud Drive.</p>
+      <div class="row2"><button type="button" class="btn primary" id="bkNow">Sauvegarder</button><button type="button" class="btn later" id="bkLater">Plus tard</button></div>`;
+    el.hidden = false;
+    $("bkNow").onclick = () => exportCSV();
+    $("bkLater").onclick = () => { lsSet(".snooze", Date.now() + 864e5); renderBackup(); toast("Rappel reporté à demain."); };
   }
 
   function emptyHTML() {
@@ -702,9 +838,7 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
         <div class="right">${tagHTML(r.prix, "plain")}</div></button></li>`).join("")}</ul>`;
     $("prodAdd").onclick = () => {
       $("prodDlg").close();
-      const mode = inferMode(p.last);
-      openForm({ produit: p.name, marque: p.last.marque, bio: p.last.bio, ean: p.last.ean, mode, unite: p.last.unite,
-        quantite: mode === "paquet" ? p.last.quantite : null, qteValeur: mode === "paquet" ? p.last.qteValeur : null, qteUnite: mode === "paquet" ? p.last.qteUnite : null, noPrice: true });
+      openForm(prefillFrom(p));
     };
     if (!$("prodDlg").open) $("prodDlg").showModal();
   }
@@ -733,6 +867,14 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
   // ---------- Formulaire ----------
   const form = $("form");
   let editingId = null, delArmed = false, scanCtl = null;
+
+  // Pré-remplissage à partir du dernier relevé d'un produit (nom, marque, bio, type de prix, format)
+  function prefillFrom(p, extra = {}) {
+    const L = p.last, mode = inferMode(L);
+    return { produit: p.name, marque: L.marque, bio: L.bio, ean: L.ean, mode, unite: L.unite,
+      quantite: mode === "paquet" ? L.quantite : null, qteValeur: mode === "paquet" ? L.qteValeur : null,
+      qteUnite: mode === "paquet" ? L.qteUnite : null, noPrice: true, ...extra };
+  }
 
   function lastStore() {
     const r = [...state.releves].sort((a, b) => (b.createdAt || b.date) - (a.createdAt || a.date))[0];
@@ -942,7 +1084,10 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
     updateCalc(); renderPrev();
   });
 
-  function openForm(prefill = {}, id = null) {
+  function openForm(prefill = {}, id = null, opts = {}) {
+    form.dataset.chain = opts.chain && !id ? "1" : "";
+    $("saveNextBtn").hidden = !form.dataset.chain;
+    $("scanbox").classList.remove("noimg"); $("scanImg").hidden = false;
     editingId = id; delArmed = false;
     form.reset();
     form.querySelectorAll("input").forEach(i => i.classList.remove("read"));
@@ -974,10 +1119,12 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
     $("saveBtn").disabled = false;
     if (!$("formDlg").open) $("formDlg").showModal();
     if (!id && !prefill.produit) setTimeout(() => { if (document.activeElement?.tagName !== "INPUT") f.produit.focus(); }, 50);
+    else if (!id && prefill.noPrice) { try { f.prix.focus({ preventScroll: true }); } catch {} }
   }
 
   form.addEventListener("submit", async e => {
     e.preventDefault();
+    const next = e.submitter?.id === "saveNextBtn";
     const f = form.elements;
     const produit = f.produit.value.trim();
     const e2 = computeEntry();
@@ -1003,17 +1150,19 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
       createdAt: Number(form.dataset.createdAt) || Date.now()
     };
     if (editingId) rec.id = editingId;
-    $("saveBtn").disabled = true;
+    $("saveBtn").disabled = true; $("saveNextBtn").disabled = true;
     try {
       await Store.save(rec);
+      $("saveNextBtn").disabled = false;
       $("formDlg").close();
+      if (next) setTimeout(() => openQuick(), 0);
       const c = cmpInfo;
       toast(editingId ? "Relevé modifié."
         : c && Math.abs(c.d) >= 0.005 ? `${rec.produit} : ${c.d > 0 ? "hausse" : "baisse"} de ${num2.format(c.oldV)} € à ${num2.format(c.newV)} €${perShort(c.per)} (${c.d > 0 ? "+" : "−"}${Math.round(Math.abs(c.pct) * 100)} %).`
         : `${rec.produit} : ${eur.format(rec.prix)} enregistré.`);
       if ($("prodDlg").open) openProduct(norm(rec.produit));
     } catch (err) {
-      $("saveBtn").disabled = false;
+      $("saveBtn").disabled = false; $("saveNextBtn").disabled = false;
       toast(err?.code === "quota_exceeded" ? "Le carnet est plein. Supprime d’anciens relevés pour continuer."
         : err?.code === "invalid_argument" ? "Tu n’as pas le droit de modifier ce carnet."
         : "L’enregistrement a échoué. Vérifie ta connexion et réessaie.");
@@ -1049,11 +1198,17 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
     } catch { setScan(false); }
   }
   function setScan(ok) {
-    $("scanBtn").disabled = !ok;
-    $("scanBtn").title = ok ? "" : "La lecture automatique n’est pas disponible ici. Utilise « Saisir ».";
+    // Le code-barres marche partout ; seule l'option photo dépend du moteur de lecture
+    $("scanPhoto").disabled = !ok;
+    $("photoXp").hidden = engine === "claude";
+    $("photoDesc").textContent = !ok ? "Lecture de photo indisponible ici."
+      : engine === "claude" ? "Claude lit le prix, le prix au kg, le nom et la marque. Vérifie avant d’enregistrer."
+      : "Essaie de lire le prix et le nom sur la photo. Souvent imprécis : vérifie tout.";
   }
 
-  $("scanBtn").addEventListener("click", () => { if (engine) $("photo").click(); });
+  $("scanBtn").addEventListener("click", () => $("scanDlg").showModal());
+  $("scanPhoto").addEventListener("click", () => { if (!engine) return; $("scanDlg").close(); $("photo").click(); });
+  $("scanBarcode").addEventListener("click", () => { $("scanDlg").close(); startBarcode(); });
   $("photo").addEventListener("change", async () => {
     const file = $("photo").files?.[0];
     $("photo").value = "";
@@ -1430,6 +1585,8 @@ N'invente rien : mets null pour tout ce qui n'est pas lisible sur la photo. Ne c
       ? `Télécharge tes ${n} relevé${n > 1 ? "s" : ""} dans un fichier CSV lisible par Excel, Numbers ou Google Sheets.`
       : "Rien à exporter pour l’instant : ton carnet est vide.";
     $("exportBtn").disabled = !n;
+    $("lastSave").textContent = Store.mode === "local" ? lastSaveText() : "";
+    $("lastSave").hidden = Store.mode !== "local";
     resetImport();
     if (!$("dataDlg").open) $("dataDlg").showModal();
   }
@@ -1446,14 +1603,21 @@ N'invente rien : mets null pour tout ce qui n'est pas lisible sur la photo. Ne c
     return "\uFEFF" + [COLS, ...rows].map(r => r.map(csvCell).join(";")).join("\r\n") + "\r\n";
   }
 
-  $("exportBtn").addEventListener("click", async () => {
+  $("exportBtn").addEventListener("click", () => exportCSV());
+  function markSaved() {
+    lsSet(".backup", Date.now()); lsSet(".snooze", 0);
+    renderBackup();
+    if ($("dataDlg").open) $("lastSave").textContent = lastSaveText();
+  }
+  async function exportCSV() {
+    if (!state.releves.length) return;
     const filename = `carnet-de-prix-${todayISO()}.csv`;
     const data = buildCSV();
     if (!downloads && window.claude && typeof window.claude.use === "function") {
       try { downloads = await claude.use("downloads"); } catch { downloads = null; }
     }
     if (downloads) {
-      try { await downloads.save({ filename, data }); toast("Fichier CSV exporté."); }
+      try { await downloads.save({ filename, data }); toast("Fichier CSV exporté."); markSaved(); }
       catch (e) {
         if (e?.code === "declined") return;
         toast(e?.code === "rate_limited" ? "Un téléchargement est déjà en attente de confirmation."
@@ -1461,13 +1625,23 @@ N'invente rien : mets null pour tout ce qui n'est pas lisible sur la photo. Ne c
       }
       return;
     }
-    // Hors de Claude : téléchargement classique du navigateur
+    // Hors de Claude : feuille de partage du téléphone (« Enregistrer dans Fichiers »), sinon téléchargement
+    try {
+      const file = new File([data], filename, { type: "text/csv" });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: "Sauvegarde du carnet de prix" });
+        toast("Sauvegarde faite."); markSaved();
+        return;
+      }
+    } catch (e) {
+      if (e?.name === "AbortError") { toast("Sauvegarde annulée."); return; }
+    }
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([data], { type: "text/csv;charset=utf-8" }));
     a.download = filename; document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    toast("Fichier CSV exporté.");
-  });
+    toast("Fichier CSV exporté."); markSaved();
+  }
 
   function parseCSV(text) {
     text = text.replace(/^\uFEFF/, "");
@@ -1642,9 +1816,211 @@ N'invente rien : mets null pour tout ce qui n'est pas lisible sur la photo. Ne c
     }
   });
 
+  // ---------- Ajout rapide : choisir un produit déjà relevé ----------
+  function quickList() {
+    const q = norm($("quickQ").value);
+    const list = products()
+      .filter(p => !q || norm(p.name).includes(q) || p.items.some(r => norm(r.marque).includes(q)))
+      .sort((a, b) => (b.items.length - a.items.length) || (b.last.date - a.last.date));
+    $("quickNew").textContent = q ? `+ Nouveau produit « ${$("quickQ").value.trim()} »` : "+ Nouveau produit";
+    $("quickList").innerHTML = list.length ? list.slice(0, 80).map(p => {
+      const L = p.last, per = p.basis || (inferMode(L) !== "paquet" ? (L.unite || "kg") : null);
+      const v = per ? (L.prixUnite ?? L.prix) : L.prix;
+      return `<li><button type="button" class="row" data-quick="${esc(p.key)}">
+        <div><div class="name">${esc(p.name)}${L.bio ? BIO : ""}</div>
+          <div class="meta">${L.marque ? esc(L.marque) + ", " : ""}${esc(L.magasin || "magasin non indiqué")}, ${esc(shortDate.format(L.date))}${L.quantite && !per ? ", " + esc(L.quantite) : ""}</div></div>
+        <div class="right">${tagHTML(v, "plain", per)}</div></button></li>`;
+    }).join("") : `<li class="hint" style="padding:12px 4px">Aucun produit ne correspond. Utilise « Nouveau produit ».</li>`;
+  }
+  // Bulle d'aide : affichée automatiquement les premières fois, puis au toucher du champ de recherche ou du « ? »
+  const HELP_KEY = LS_KEY + ".quickhelp";
+  function showHelp(on) {
+    $("quickHelp").hidden = !on;
+    $("quickHelpBtn").setAttribute("aria-expanded", String(on));
+  }
+  function helpSeen() { try { return Number(localStorage.getItem(HELP_KEY)) || 0; } catch { return 0; } }
+  function setHelpSeen(n) { try { localStorage.setItem(HELP_KEY, String(n)); } catch {} }
+  $("quickHelpBtn").addEventListener("click", () => showHelp($("quickHelp").hidden));
+  $("quickHelpOk").addEventListener("click", () => { showHelp(false); setHelpSeen(99); });
+  let helpDismissedOnce = false;
+  $("quickQ").addEventListener("focus", () => { if (!helpDismissedOnce) showHelp(true); });
+  $("quickQ").addEventListener("input", () => { if ($("quickQ").value) { showHelp(false); helpDismissedOnce = true; } });
+
+  function openQuick() {
+    $("quickQ").value = "";
+    const n = helpSeen();
+    helpDismissedOnce = n >= 99;
+    showHelp(n < 3);
+    if (n < 3) setHelpSeen(n + 1);
+    quickList();
+    if (!$("quickDlg").open) $("quickDlg").showModal();
+    $("quickDlg").querySelector(".dlg-body").scrollTop = 0;
+  }
+  $("quickQ").addEventListener("input", quickList);
+  $("quickNew").addEventListener("click", () => {
+    const name = $("quickQ").value.trim();
+    $("quickDlg").close();
+    openForm(name ? { produit: name } : {}, null, { chain: true });
+  });
+  $("quickList").addEventListener("click", e => {
+    const b = e.target.closest("[data-quick]");
+    if (!b) return;
+    const p = products().find(x => x.key === b.dataset.quick);
+    if (!p) return;
+    $("quickDlg").close();
+    openForm(prefillFrom(p), null, { chain: true });
+  });
+
+  // ---------- Code-barres en direct ----------
+  let bcStream = null, bcTimer = null, bcRun = 0, bcLast = null;
+  const bcStatus = t => { $("bcStatus").textContent = t; };
+  async function startBarcode() {
+    const run = ++bcRun; bcLast = null;
+    $("bcWrap").hidden = false; $("bcPhotoBtn").hidden = false;
+    bcStatus("Ouverture de la caméra…");
+    if (!$("bcDlg").open) $("bcDlg").showModal();
+    try {
+      if (!navigator.mediaDevices?.getUserMedia) throw new Error("nocam");
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: false,
+        video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } } });
+      if (run !== bcRun) { stream.getTracks().forEach(t => t.stop()); return; }
+      bcStream = stream;
+      const v = $("bcVideo"); v.srcObject = stream;
+      try { await v.play(); } catch {}
+    } catch (e) {
+      if (run !== bcRun) return;
+      $("bcWrap").hidden = true;
+      bcStatus(e?.name === "NotAllowedError"
+        ? "L’accès à l’appareil photo a été refusé. Autorise-le dans les réglages du navigateur, ou prends une photo du code-barres."
+        : "La caméra en direct n’est pas disponible ici. Prends une photo du code-barres à la place.");
+      return;
+    }
+    bcStatus("Place le code-barres dans le cadre, bien à plat.");
+    let decode;
+    try { decode = await makeDecoder(); } catch { if (run === bcRun) bcStatus("Le module de lecture n’a pas pu être téléchargé. Vérifie ta connexion."); return; }
+    const loop = async () => {
+      if (run !== bcRun) return;
+      const v = $("bcVideo");
+      if (v.readyState >= 2 && v.videoWidth) {
+        let code = null;
+        try { code = await decode(v); } catch {}
+        if (run !== bcRun) return;
+        if (code) {
+          const strong = /^\d{8}$|^\d{12,13}$/.test(code) && eanOk(code.length === 12 ? "0" + code : code);
+          if (strong || code === bcLast) { foundCode(code.length === 12 ? "0" + code : code); return; }
+          bcLast = code;
+        }
+      }
+      bcTimer = setTimeout(loop, 180);
+    };
+    loop();
+  }
+  function stopBarcode() {
+    bcRun++; clearTimeout(bcTimer);
+    if (bcStream) { bcStream.getTracks().forEach(t => t.stop()); bcStream = null; }
+    $("bcVideo").srcObject = null;
+  }
+  $("bcDlg").addEventListener("close", stopBarcode);
+
+  let decoderP = null;
+  function makeDecoder() {
+    return decoderP ||= (async () => {
+      if ("BarcodeDetector" in window) {
+        try {
+          const fm = await BarcodeDetector.getSupportedFormats();
+          const want = ["ean_13", "ean_8", "upc_a", "upc_e", "code_128"].filter(f => fm.includes(f));
+          if (want.includes("ean_13")) {
+            const det = new BarcodeDetector({ formats: want });
+            return async v => (await det.detect(v))[0]?.rawValue || null;
+          }
+        } catch {}
+      }
+      await loadScript(ZXING_URL);
+      const hints = new Map();
+      hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.UPC_A, ZXing.BarcodeFormat.UPC_E, ZXing.BarcodeFormat.CODE_128]);
+      const reader = new ZXing.MultiFormatReader(); reader.setHints(hints);
+      const c = document.createElement("canvas"), ctx = c.getContext("2d", { willReadFrequently: true });
+      return async v => {
+        // Bande centrale de l'image (là où se trouve le cadre)
+        const sw = v.videoWidth * 0.86, sh = v.videoHeight * 0.42, sx = (v.videoWidth - sw) / 2, sy = (v.videoHeight - sh) / 2;
+        const k = Math.min(1, 900 / sw);
+        c.width = Math.round(sw * k); c.height = Math.round(sh * k);
+        ctx.drawImage(v, sx, sy, sw, sh, 0, 0, c.width, c.height);
+        try { return reader.decode(new ZXing.BinaryBitmap(new ZXing.HybridBinarizer(new ZXing.HTMLCanvasElementLuminanceSource(c)))).getText(); }
+        catch { return null; } finally { reader.reset(); }
+      };
+    })().catch(e => { decoderP = null; throw e; });
+  }
+
+  // Repli : photo du code-barres
+  $("bcPhotoBtn").addEventListener("click", () => { stopBarcode(); $("bcPhoto").click(); });
+  $("bcPhoto").addEventListener("change", async () => {
+    const file = $("bcPhoto").files?.[0]; $("bcPhoto").value = "";
+    if (!file) return;
+    if (!$("bcDlg").open) $("bcDlg").showModal();
+    $("bcWrap").hidden = true; bcStatus("Lecture du code-barres…");
+    const url = URL.createObjectURL(file);
+    let code = null;
+    try { code = await readBarcode(await loadImage(url)); } catch {}
+    URL.revokeObjectURL(url);
+    if (code) foundCode(code.length === 12 ? "0" + code : code);
+    else bcStatus("Aucun code-barres lisible sur cette photo. Rapproche-toi, évite les reflets, et réessaie.");
+  });
+
+  async function foundCode(raw) {
+    const code = String(raw).replace(/\s/g, "");
+    try { navigator.vibrate?.(60); } catch {}
+    stopBarcode();
+    $("bcDlg").close();
+    const digits = code.replace(/\D/g, "");
+    const hit = [...state.releves].filter(r => r.ean && r.ean === digits).sort((a, b) => b.date - a.date)[0];
+    if (hit) {
+      const p = products().find(x => x.key === norm(hit.produit));
+      if (p) { openForm(prefillFrom(p, { ean: digits }), null, { chain: true }); toast(`Produit reconnu : ${p.name}`); return; }
+    }
+    openForm({ ean: digits }, null, { chain: true });
+    $("scanbox").hidden = false; $("scanbox").classList.add("noimg");
+    const instore = /^2\d{12}$/.test(digits);
+    if (instore || !eanOk(digits)) {
+      $("scanStatus").textContent = instore ? "Code propre au magasin" : "Code-barres lu";
+      $("scanSub").textContent = instore
+        ? "Ce code est créé par le magasin (souvent un produit pesé) et peut changer à chaque achat. Indique le nom du produit."
+        : "Indique le nom du produit : il sera reconnu au prochain scan.";
+      return;
+    }
+    $("scanStatus").innerHTML = `<span class="spinner" aria-hidden="true"></span>Recherche du produit…`;
+    $("scanSub").textContent = `Code ${digits}`;
+    const off = await offLookup(digits);
+    if (!$("formDlg").open || form.elements.ean.value !== digits) return;
+    const f = form.elements;
+    if (!off) {
+      $("scanStatus").textContent = "Produit inconnu";
+      $("scanSub").textContent = "Absent d’Open Food Facts (ou pas de connexion). Indique le nom : il sera reconnu au prochain scan.";
+      setTimeout(() => f.produit.focus(), 50);
+      return;
+    }
+    const mark = el => el.classList.add("read");
+    if (off.produit && !f.produit.value) { f.produit.value = off.produit; mark(f.produit); }
+    if (off.marque && !f.marque.value) { f.marque.value = off.marque; mark(f.marque); }
+    if (off.bio && !f.bio.checked) { f.bio.checked = true; $("bioLabel").classList.add("read"); }
+    const q = parseQtyStr(off.quantite);
+    if (q && MODE_UNITS.paquet.includes(q.u) && !f.qteValeur.value) { f.qteValeur.value = fmtNum(q.v); f.qteUnite.value = q.u; mark(f.qteValeur); }
+    $("scanStatus").textContent = "Trouvé dans Open Food Facts";
+    $("scanSub").textContent = "Vérifie les champs soulignés en jaune, puis indique le prix.";
+    $("readHint").hidden = false;
+    updateCalc(); renderPrev();
+    try { f.prix.focus({ preventScroll: true }); } catch {}
+  }
+
   // ---------- Événements ----------
   $("dataBtn").addEventListener("click", openData);
-  $("manualBtn").addEventListener("click", () => openForm());
+  $("manualBtn").addEventListener("click", () => state.releves.length ? openQuick() : openForm());
+  form.addEventListener("change", e => {
+    // Texte lu par l'appareil photo (« 2,49 €/kg ») : ne garde que le montant
+    if (e.target.name !== "prix") return;
+    const v = e.target.value.trim(), n = parseNum(v);
+    if (v && n != null && !/^\d+([.,]\d{1,2})?$/.test(v)) { e.target.value = num2.format(n); updateCalc(); renderPrev(); }
+  });
   $("q").addEventListener("input", e => { state.q = e.target.value; render(); });
   $("sort").addEventListener("change", e => { state.sort = e.target.value; render(); });
   document.querySelectorAll(".seg [data-view]").forEach(b => b.addEventListener("click", () => {
@@ -1678,6 +2054,17 @@ N'invente rien : mets null pour tout ce qui n'est pas lisible sur la photo. Ne c
 
   const h = location.hash.slice(1);
   if (h === "historique" || h === "produits") state.view = h;
+  function fitByline() {
+    const h = document.querySelector(".titles h1"), b = $("byline");
+    if (!h || !b) return;
+    b.style.fontSize = "";
+    const max = parseFloat(getComputedStyle(b).fontSize), w = h.getBoundingClientRect().width;
+    b.style.width = "max-content"; const need = b.getBoundingClientRect().width; b.style.width = "";
+    if (need > w && need > 0) b.style.fontSize = Math.max(8, Math.floor(max * w / need * 10) / 10) + "px";
+  }
+  fitByline();
+  try { document.fonts?.ready.then(fitByline); } catch {}
+  addEventListener("resize", fitByline);
   Store.init();
   initSample();
 })();
