@@ -204,6 +204,32 @@ dialog::backdrop { background: rgb(0 0 0 / .45); }
 .quicksearch { width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); margin-bottom: 10px; }
 .quicknew { width: 100%; margin-bottom: 6px; }
 #quickList .row { padding: 12px 4px; }
+.more { margin: 0 0 14px; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--bg); }
+.more * { box-sizing: border-box; }
+.more summary { cursor: pointer; color: var(--muted); font-size: .92rem; }
+.more[open] summary { margin-bottom: 10px; }
+.more .field { margin-bottom: 4px; }
+.shopsec { margin: 14px 4px 2px; font: 600 .95rem "Barlow Condensed", "Arial Narrow", sans-serif; color: var(--muted); }
+.srow { list-style: none; padding: 12px 2px; border-bottom: 1px solid var(--line); }
+.srow .name { font-weight: 600; font-size: 1.02rem; overflow-wrap: anywhere; }
+.srow .meta { color: var(--muted); font-size: .86rem; margin-top: 1px; }
+.srow .cheaper { color: var(--down); font-weight: 600; }
+.srow .here-best { color: var(--down); font-weight: 600; }
+.sctl { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; gap: 6px; margin-top: 8px; align-items: center; }
+.pin { position: relative; }
+.pin input { width: 100%; padding: 10px 64px 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); font: 700 1.25rem "Barlow Condensed", "Arial Narrow", sans-serif; min-width: 0; }
+.pin input::placeholder { color: var(--muted); opacity: .45; font-weight: 500; }
+.pin .u { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: .82rem; pointer-events: none; white-space: nowrap; max-width: 60px; overflow: hidden; text-overflow: ellipsis; }
+.sbtn { min-height: 44px; min-width: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font-weight: 700; cursor: pointer; }
+.sbtn.ok { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sbtn.same { font-size: 1.2rem; }
+.sbtn.dots { padding: 0 8px; color: var(--muted); }
+.sbtn:disabled { opacity: .35; cursor: not-allowed; }
+.sres { margin-top: 8px; padding: 8px 10px; border-radius: 8px; font-size: .9rem; background: color-mix(in srgb, var(--down) 10%, var(--surface)); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.sres .up { color: var(--up); font-weight: 600; } .sres .down { color: var(--down); font-weight: 600; }
+.sres .link { padding: 2px 0; font-size: .88rem; }
+.srow.done .sctl { opacity: .55; }
+.shopcount { flex: 1; align-self: center; color: var(--muted); font-size: .92rem; }
 .helpbtn { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--line); background: var(--bg); font: 700 .95rem/1 "Barlow", system-ui, sans-serif; color: var(--muted); cursor: pointer; }
 .helpbtn[aria-expanded="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .bubble { position: relative; margin: 4px 0 14px; padding: 12px 14px 8px; border-radius: 12px; background: var(--ink); color: var(--bg); font-size: .9rem; line-height: 1.4; }
@@ -395,12 +421,15 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
       </div>
       <div class="calc" id="calcLine" hidden></div>
       <div class="prev" id="prevPanel" hidden></div>
-      <div class="grid2">
-        <label class="field"><span>Date</span>
-          <input name="date" type="date"></label>
-        <label class="field"><span>Code-barres</span>
-          <input name="ean" inputmode="numeric" autocomplete="off" placeholder="facultatif"></label>
-      </div>
+      <details class="more" id="moreBox" open>
+        <summary id="moreSum">Date et code-barres</summary>
+        <div class="grid2">
+          <label class="field"><span>Date</span>
+            <input name="date" type="date"></label>
+          <label class="field"><span>Code-barres</span>
+            <input name="ean" inputmode="numeric" autocomplete="off" placeholder="facultatif"></label>
+        </div>
+      </details>
       <p class="hint" id="readHint" hidden>Les champs soulignés en jaune ont été lus sur l’étiquette. Vérifie-les avant d’enregistrer.</p>
       <button type="button" class="btn danger" id="delBtn" hidden style="width:100%">Supprimer ce relevé</button>
     </div>
@@ -429,13 +458,38 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
           <li><b>Touche un produit</b> de la liste : son nom, sa marque, le bio, le type de prix (paquet, au kg, au litre) et ton dernier magasin sont repris.</li>
           <li><b>Tape juste le prix</b>, puis « Enregistrer ».</li>
           <li><b>« Enregistrer + suivant »</b> te ramène ici pour enchaîner l’article suivant.</li>
+          <li><b>« En magasin »</b> : choisis le magasin une fois, puis tape les prix directement dans la liste, sans formulaire.</li>
         </ol>
         <p>Tape quelques lettres ici pour retrouver un produit. Pas dans la liste ? Touche « Nouveau produit ».</p>
         <button type="button" class="link" id="quickHelpOk">Compris</button>
       </div>
+      <button type="button" class="btn primary quicknew" id="quickShop">En magasin : relever plusieurs prix d’affilée</button>
       <button type="button" class="btn quicknew" id="quickNew">+ Nouveau produit</button>
       <ul class="list" id="quickList"></ul>
     </div>
+  </div>
+</dialog>
+
+<!-- Mode En magasin -->
+<dialog id="shopDlg" aria-labelledby="shopTitle">
+  <div class="dlg">
+    <div class="dlg-head">
+      <h2 id="shopTitle">En magasin</h2>
+      <button type="button" class="link" data-close>Terminer</button>
+    </div>
+    <div class="dlg-body" id="shopBody">
+      <div class="grid2">
+        <label class="field"><span>Magasin</span>
+          <input id="shopStore" list="dlMagasins" autocomplete="off" placeholder="ex. Biocoop"></label>
+        <label class="field"><span>Date</span>
+          <input id="shopDate" type="date"></label>
+      </div>
+      <input class="quicksearch" id="shopQ" type="search" placeholder="Chercher un produit" autocomplete="off">
+      <p class="hint" id="shopHint" style="margin:0 0 6px">Tape le prix puis <b>OK</b>. <b>=</b> confirme le même prix que la dernière fois dans ce magasin.</p>
+      <div id="shopList"></div>
+      <button type="button" class="btn quicknew" id="shopNew" style="margin-top:12px">+ Nouveau produit dans ce magasin</button>
+    </div>
+    <div class="dlg-foot"><span class="shopcount" id="shopCount">Aucun prix enregistré</span><button type="button" class="btn primary" data-close style="flex:0 0 auto">Terminer</button></div>
   </div>
 </dialog>
 
@@ -1084,7 +1138,13 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
     updateCalc(); renderPrev();
   });
 
+  function moreSummary() {
+    const f = form.elements, iso = f.date.value || todayISO();
+    const d = iso === todayISO() ? "aujourd’hui" : dateY.format(isoToTs(iso));
+    $("moreSum").textContent = `Date : ${d}${f.ean.value ? ", code-barres " + f.ean.value : ""}`;
+  }
   function openForm(prefill = {}, id = null, opts = {}) {
+    form.dataset.ret = opts.ret || "";
     form.dataset.chain = opts.chain && !id ? "1" : "";
     $("saveNextBtn").hidden = !form.dataset.chain;
     $("scanbox").classList.remove("noimg"); $("scanImg").hidden = false;
@@ -1115,6 +1175,9 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
     f.marque.value = prefill.marque || "";
     f.bio.checked = !!prefill.bio; $("bioLabel").classList.remove("read");
     f.date.value = prefill.date ? tsToIso(prefill.date) : todayISO();
+    // Produit connu : date et code-barres repliés (un résumé reste visible), le reste du formulaire suffit
+    $("moreBox").open = !(prefill.noPrice && !id) || f.date.value !== todayISO();
+    moreSummary();
     form.dataset.createdAt = prefill.createdAt || "";
     $("saveBtn").disabled = false;
     if (!$("formDlg").open) $("formDlg").showModal();
@@ -1156,6 +1219,7 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
       $("saveNextBtn").disabled = false;
       $("formDlg").close();
       if (next) setTimeout(() => openQuick(), 0);
+      else if (form.dataset.ret === "shop") { shopSaved++; }
       const c = cmpInfo;
       toast(editingId ? "Relevé modifié."
         : c && Math.abs(c.d) >= 0.005 ? `${rec.produit} : ${c.d > 0 ? "hausse" : "baisse"} de ${num2.format(c.oldV)} € à ${num2.format(c.newV)} €${perShort(c.per)} (${c.d > 0 ? "+" : "−"}${Math.round(Math.abs(c.pct) * 100)} %).`
@@ -1871,6 +1935,160 @@ N'invente rien : mets null pour tout ce qui n'est pas lisible sur la photo. Ne c
     openForm(prefillFrom(p), null, { chain: true });
   });
 
+  // ---------- Mode « En magasin » : un prix par ligne, sans formulaire ----------
+  let shopSaved = 0;
+  const shopTs = () => isoToTs($("shopDate").value || todayISO());
+  const shopKey = () => norm($("shopStore").value);
+  // Valeur à saisir pour un relevé selon son type de prix : au kg / l pour le vrac, prix du paquet sinon
+  const inputVal = r => inferMode(r) === "paquet" ? r.prix : (r.prixUnite ?? r.prix);
+  function unitLabel(r) {
+    const m = inferMode(r);
+    if (m === "kg") return "€/kg";
+    if (m === "l") return "€/l";
+    const q = r.qteValeur ? { v: r.qteValeur, u: r.qteUnite } : parseQtyStr(r.quantite);
+    return q && QTY_UNITS[q.u] ? `€ · ${fmtQty(q.v, q.u)}` : "€";
+  }
+  // Construit un relevé à partir du dernier relevé de référence du produit
+  function makeRec(p, base, value, store, ts) {
+    const mode = inferMode(base);
+    const rec = { id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random(),
+      produit: p.name, marque: base.marque || null, bio: !!base.bio, ean: base.ean || null,
+      magasin: store, date: ts, createdAt: Date.now(), mode, qteValeur: null, qteUnite: null };
+    if (mode !== "paquet") Object.assign(rec, { prix: value, prixUnite: value, unite: mode, quantite: mode === "kg" ? "au kg" : "au litre" });
+    else {
+      const q = base.qteValeur ? { v: base.qteValeur, u: base.qteUnite } : parseQtyStr(base.quantite);
+      if (q && QTY_UNITS[q.u]) Object.assign(rec, { prix: value, prixUnite: round2(value / (q.v * QTY_UNITS[q.u].f)), unite: QTY_UNITS[q.u].base, quantite: fmtQty(q.v, q.u), qteValeur: q.v, qteUnite: q.u });
+      else Object.assign(rec, { prix: value, prixUnite: null, unite: null, quantite: base.quantite || null });
+    }
+    return rec;
+  }
+  function shopModel() {
+    const k = shopKey(), q = norm($("shopQ").value);
+    return products().filter(p => !q || norm(p.name).includes(q) || p.items.some(r => norm(r.marque).includes(q))).map(p => {
+      const hereItems = k ? p.items.filter(r => norm(r.magasin) === k) : [];
+      const here = hereItems[hereItems.length - 1] || null;
+      const base = here || p.last;
+      const others = p.current.filter(r => norm(r.magasin) !== k);
+      const bestElse = others.length ? others.reduce((a, b) => p.val(a) <= p.val(b) ? a : b) : null;
+      return { p, here, base, bestElse };
+    });
+  }
+  function shopRowHTML(m) {
+    const { p, here, base, bestElse } = m, per = p.basis;
+    const hereTxt = here ? `Ici : ${esc(num2.format(inputVal(here)))} ${esc(unitLabel(here))}, ${esc(shortDate.format(here.date))}` : (shopKey() ? "Jamais relevé ici" : esc(base.magasin ? `Dernier : ${base.magasin}` : ""));
+    let cmp = "";
+    if (bestElse) {
+      const hv = here ? p.val(here) : null, bv = p.val(bestElse);
+      cmp = hv != null && hv <= bv ? `<div class="meta here-best">Ici, c’est le moins cher relevé</div>`
+        : `<div class="meta cheaper">Moins cher : ${esc(num2.format(bv))} ${esc(per ? "€" + perShort(per).trim() : unitLabel(bestElse))} chez ${esc(bestElse.magasin || "—")}</div>`;
+    }
+    const ph = here ? num2.format(inputVal(here)) : "0,00";
+    return `<li class="srow" data-sk="${esc(p.key)}">
+      <div class="name">${esc(p.name)}${base.bio ? BIO : ""}</div>
+      <div class="meta">${base.marque ? esc(base.marque) + ", " : ""}${hereTxt}</div>${cmp}
+      <div class="sctl">
+        <div class="pin"><input inputmode="decimal" autocomplete="off" placeholder="${esc(ph)}" aria-label="Prix de ${esc(p.name)} en ${esc(unitLabel(base))}"><span class="u">${esc(unitLabel(base))}</span></div>
+        <button type="button" class="sbtn ok" data-sact="ok">OK</button>
+        <button type="button" class="sbtn same" data-sact="same" ${here ? "" : "disabled"} title="Même prix qu’ici la dernière fois" aria-label="Même prix qu’ici la dernière fois">=</button>
+        <button type="button" class="sbtn dots" data-sact="form" title="Autre format, bio, marque…" aria-label="Ouvrir le formulaire complet">⋯</button>
+      </div>
+      <div class="sres" hidden></div>
+    </li>`;
+  }
+  function renderShop() {
+    const k = shopKey(), model = shopModel();
+    const here = model.filter(m => m.here).sort((a, b) => a.p.name.localeCompare(b.p.name, "fr"));
+    const rest = model.filter(m => !m.here).sort((a, b) => a.p.name.localeCompare(b.p.name, "fr"));
+    let html = "";
+    if (!k) html += `<p class="hint" style="margin:10px 0 0">Indique d’abord le magasin : les produits déjà relevés ici passeront en tête.</p>`;
+    if (here.length) html += `<h3 class="shopsec">Déjà relevés ici (${here.length})</h3><ul style="margin:0;padding:0">${here.map(shopRowHTML).join("")}</ul>`;
+    if (rest.length) html += `<h3 class="shopsec">${k ? "Autres produits" : "Tes produits"} (${rest.length})</h3><ul style="margin:0;padding:0">${rest.map(shopRowHTML).join("")}</ul>`;
+    if (!model.length) html += `<p class="hint" style="margin:12px 0 0">Aucun produit ne correspond. Utilise « Nouveau produit dans ce magasin ».</p>`;
+    $("shopList").innerHTML = html;
+    $("shopNew").textContent = $("shopQ").value.trim() ? `+ Nouveau produit « ${$("shopQ").value.trim()} »` : "+ Nouveau produit dans ce magasin";
+  }
+  function shopCount() {
+    $("shopCount").textContent = shopSaved ? `${shopSaved} prix enregistré${shopSaved > 1 ? "s" : ""}` : "Aucun prix enregistré";
+  }
+  function openShop(keep) {
+    if (!keep) {
+      shopSaved = 0;
+      $("shopStore").value = lastStore();
+      $("shopDate").value = todayISO();
+      $("shopQ").value = "";
+    }
+    renderShop(); shopCount();
+    if (!$("shopDlg").open) $("shopDlg").showModal();
+    if (!keep) $("shopBody").scrollTop = 0;
+  }
+  $("quickShop").addEventListener("click", () => { $("quickDlg").close(); openShop(false); });
+  $("shopStore").addEventListener("input", renderShop);
+  $("shopQ").addEventListener("input", renderShop);
+  $("shopDate").addEventListener("change", () => { if (!$("shopDate").value) $("shopDate").value = todayISO(); });
+  $("shopDlg").addEventListener("close", () => { if (state.ready) render(); });
+  $("shopNew").addEventListener("click", () => {
+    const name = $("shopQ").value.trim();
+    $("shopDlg").close();
+    openForm({ produit: name || undefined, magasin: $("shopStore").value.trim(), date: shopTs() }, null, { ret: "shop" });
+  });
+  $("shopList").addEventListener("keydown", e => {
+    if (e.key === "Enter" && e.target.matches(".pin input")) { e.preventDefault(); e.target.closest(".srow").querySelector('[data-sact="ok"]').click(); }
+  });
+  $("shopList").addEventListener("click", async e => {
+    const b = e.target.closest("[data-sact]"), row = e.target.closest(".srow");
+    if (!b || !row) return;
+    const m = shopModel().find(x => x.p.key === row.dataset.sk);
+    if (!m) return;
+    const store = $("shopStore").value.trim(), act = b.dataset.sact;
+    if (act === "form") {
+      $("shopDlg").close();
+      openForm(prefillFrom(m.p, { magasin: store, date: shopTs(), ...(m.here ? { bio: m.here.bio, marque: m.here.marque } : {}) }), null, { ret: "shop" });
+      return;
+    }
+    if (act === "undo") {
+      const id = b.dataset.id;
+      try { await Store.remove(id); shopSaved = Math.max(0, shopSaved - 1); shopCount(); row.classList.remove("done"); row.querySelector(".sres").hidden = true; toast("Relevé annulé."); }
+      catch { toast("L’annulation a échoué. Supprime-le depuis l’Historique."); }
+      return;
+    }
+    if (act === "bio") {
+      const r = state.releves.find(x => x.id === b.dataset.id);
+      if (!r) return;
+      r.bio = !r.bio; b.setAttribute("aria-pressed", String(r.bio));
+      try { await Store.save({ ...r }); } catch { r.bio = !r.bio; b.setAttribute("aria-pressed", String(r.bio)); toast("Modification non enregistrée."); }
+      return;
+    }
+    if (!store) { toast("Indique d’abord le magasin, en haut."); $("shopStore").focus(); return; }
+    const inp = row.querySelector(".pin input");
+    const value = act === "same" ? (m.here ? inputVal(m.here) : null) : parseNum(inp.value);
+    if (value == null || value <= 0) { toast("Tape le prix, par exemple 2,49."); inp.focus(); return; }
+    const rec = makeRec(m.p, m.here || m.base, value, store, shopTs());
+    if (m.here && !rec.bio) rec.bio = !!m.here.bio;
+    b.disabled = true;
+    try { await Store.save(rec); }
+    catch { b.disabled = false; toast("L’enregistrement a échoué. Réessaie."); return; }
+    b.disabled = false;
+    shopSaved++; shopCount();
+    // Résultat : comparaison avec l'ancien prix ici et avec le moins cher ailleurs
+    const p = m.p, nv = p.basis ? rec.prixUnite : rec.prix;
+    let txt = `<span>✓ ${esc(num2.format(inputVal(rec)))} ${esc(unitLabel(rec))}</span>`;
+    if (m.here) {
+      const ov = inputVal(m.here), d = inputVal(rec) - ov;
+      txt += Math.abs(d) < 0.005 ? `<span>= inchangé</span>` : `<span class="${d > 0 ? "up" : "down"}">${d > 0 ? "▲ +" : "▼ −"}${esc(num2.format(Math.abs(d)))} € (${Math.round(Math.abs(d) / ov * 100)} %)</span>`;
+    }
+    if (m.bestElse && nv != null) {
+      const bv = p.val(m.bestElse);
+      txt += nv <= bv ? `<span class="down">Meilleur prix relevé</span>` : `<span class="up">Moins cher chez ${esc(m.bestElse.magasin || "—")}</span>`;
+    }
+    txt += `<button type="button" class="biotog" data-sact="bio" data-id="${esc(rec.id)}" aria-pressed="${rec.bio}" title="Bio ?">BIO</button>`;
+    txt += `<button type="button" class="link" data-sact="undo" data-id="${esc(rec.id)}">Annuler</button>`;
+    const res = row.querySelector(".sres"); res.innerHTML = txt; res.hidden = false;
+    row.classList.add("done"); inp.value = ""; inp.placeholder = num2.format(inputVal(rec));
+    // Passe à la ligne suivante
+    const next = [...$("shopList").querySelectorAll(".srow")].slice([...$("shopList").querySelectorAll(".srow")].indexOf(row) + 1).find(r => !r.classList.contains("done"));
+    if (act === "ok" && next) { const ni = next.querySelector(".pin input"); try { ni.focus({ preventScroll: true }); } catch {} ni.scrollIntoView({ block: "center", behavior: "smooth" }); }
+  });
+
   // ---------- Code-barres en direct ----------
   let bcStream = null, bcTimer = null, bcRun = 0, bcLast = null;
   const bcStatus = t => { $("bcStatus").textContent = t; };
@@ -2041,7 +2259,8 @@ N'invente rien : mets null pour tout ce qui n'est pas lisible sur la photo. Ne c
     const cl = e.target.closest("[data-close]");
     if (cl) { scanCtl?.abort(); cl.closest("dialog").close(); }
   });
-  $("formDlg").addEventListener("close", () => { scanCtl?.abort(); const s = $("scanImg").src; if (s.startsWith("blob:")) URL.revokeObjectURL(s); });
+  $("formDlg").addEventListener("close", () => {
+    if (form.dataset.ret === "shop") { form.dataset.ret = ""; setTimeout(() => openShop(true), 0); } scanCtl?.abort(); const s = $("scanImg").src; if (s.startsWith("blob:")) URL.revokeObjectURL(s); });
 
   let toastTimer;
   function toast(msg) {
